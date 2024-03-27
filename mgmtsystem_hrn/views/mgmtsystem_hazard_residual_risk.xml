@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 - TODAY, Kaynnan Lemes <kaynnan.lemes@escodoo.com.br>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="mgmtsystem_hazard_residual_risk_form_view">
+        <field
+            name="name"
+        >mgmtsystem.hazard.residual_risk.form (in mgmtsystem_hrn)</field>
+        <field name="model">mgmtsystem.hazard.residual_risk</field>
+        <field
+            name="inherit_id"
+            ref="mgmtsystem_hazard_risk.view_mgmtsystem_hazard_residual_risk_form"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='justification']" position="before">
+                <field name="people_id" />
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="mgmtsystem_hazard_residual_risk_tree_view">
+        <field
+            name="name"
+        >mgmtsystem.hazard.residual_risk.tree (in mgmtsystem_hrn)</field>
+        <field name="model">mgmtsystem.hazard.residual_risk</field>
+        <field
+            name="inherit_id"
+            ref="mgmtsystem_hazard_risk.view_mgmtsystem_hazard_residual_risk_tree"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='usage_id']" position="after">
+                <field name="people_id" />
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="mgmtsystem_hazard_residual_risk_filter_view">
+        <field
+            name="name"
+        >mgmtsystem.hazard.residual_risk.filter (in mgmtsystem_hrn)</field>
+        <field name="model">mgmtsystem.hazard.residual_risk</field>
+        <field
+            name="inherit_id"
+            ref="mgmtsystem_hazard_risk.view_mgmtsystem_hazard_residual_risk_filter"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='usage_id']" position="after">
+                <field name="people_id" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
