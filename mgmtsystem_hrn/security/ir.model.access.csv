@@ -1,0 +1,7 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_mgmtsystem_hazard_people_user","mgmtsystem.hazard.people.user","model_mgmtsystem_hazard_people","mgmtsystem.group_mgmtsystem_user",1,0,0,0
+"access_mgmtsystem_hazard_people_manager","mgmtsystem.hazard.people.manager","model_mgmtsystem_hazard_people","mgmtsystem.group_mgmtsystem_manager",1,1,1,1
+"access_maintenance_equipment_safety_category_user","maintenance.equipment.safety.category.user","model_maintenance_equipment_safety_category","base.group_user",1,0,0,0
+"access_maintenance_equipment_safety_category_manager","maintenance.equipment.safety.category.manager","model_maintenance_equipment_safety_category","maintenance.group_equipment_manager",1,1,1,1
+"access_mgmtsystem_hazard_evidence_user","mgmtsystem.hazard.evidence.user","model_mgmtsystem_hazard_evidence","mgmtsystem.group_mgmtsystem_user",1,0,0,0
+"access_mgmtsystem_hazard_evidence_manager","mgmtsystem.hazard.evidence.manager","model_mgmtsystem_hazard_evidence","mgmtsystem.group_mgmtsystem_manager",1,1,1,1

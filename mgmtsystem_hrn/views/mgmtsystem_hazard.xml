@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 - TODAY, Kaynnan Lemes <kaynnan.lemes@escodoo.com.br>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="mgmtsystem_hazard_form_view">
+        <field
+            name="name"
+        >mgmtsystem.hazard.form (in mgmtsystem_nonconformity_hazard)</field>
+        <field name="model">mgmtsystem.hazard</field>
+        <field name="inherit_id" ref="mgmtsystem_hazard.view_mgmtsystem_hazard_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='risk']" position="before">
+                <newline />
+                <field name="people_id" />
+            </xpath>
+            <xpath
+                expr="//notebook[@name='mgmtsystem_hazard']/page[last()]"
+                position="after"
+            >
+                <page name="hazard_evidence" string="Evidences">
+                    <group>
+                        <field
+                            name="evidence_ids"
+                            class="o_evidence_image_list"
+                            add-label="Add a Evidence"
+                            nolabel="1"
+                        >
+                            <kanban string="Evidence Images" default_order="sequence">
+                                <field name="id" />
+                                <field name="name" />
+                                <field name="description" />
+                                <field name="image_1920" />
+                                <field name="sequence" widget="handle" />
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="card oe_kanban_global_click p-0">
+                                            <div class="o_squared_image">
+                                                <img
+                                                    class="card-img-top"
+                                                    t-att-src="kanban_image('mgmtsystem.hazard.evidence', 'image_1920', record.id.raw_value)"
+                                                    t-att-alt="record.name.value"
+                                                />
+                                            </div>
+                                            <div class="card-body p-0">
+                                                <h4 class="card-title p-2 m-0 bg-200">
+                                                    <small><field name="name" /></small>
+                                                </h4>
+                                            </div>
+                                            <!-- below 100 Kb: good -->
+                                            <t
+                                                t-if="record.image_1920.raw_value.length &lt; 100*1000"
+                                            >
+                                                <t
+                                                    t-set="size_status"
+                                                    t-value="'bg-success'"
+                                                />
+                                                <t
+                                                    t-set="message"
+                                                >Acceptable file size</t>
+                                            </t>
+                                            <!-- below 1000 Kb: decent -->
+                                            <t
+                                                t-elif="record.image_1920.raw_value.length &lt; 1000*1000"
+                                            >
+                                                <t
+                                                    t-set="size_status"
+                                                    t-value="'bg-warning'"
+                                                />
+                                                <t
+                                                    t-set="message"
+                                                >Huge file size. The image should be optimized/reduced.</t>
+                                            </t>
+                                            <!-- above 1000 Kb: bad -->
+                                            <t t-else="1">
+                                                <t
+                                                    t-set="size_status"
+                                                    t-value="'bg-danger'"
+                                                />
+                                                <t
+                                                    t-set="message"
+                                                >Optimization required! Reduce the image size or increase your compression settings.</t>
+                                            </t>
+                                            <span
+                                                t-attf-class="badge #{size_status} o_evidence_image_size"
+                                                t-esc="record.image_1920.value"
+                                                t-att-title="message"
+                                            />
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>
