@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View for BPMN Diagram Version -->
+    <record id="bpmn_diagram_version_view_tree" model="ir.ui.view">
+        <field name="name">bpmn.diagram.version.view.tree</field>
+        <field name="model">bpmn.diagram.version</field>
+        <field name="arch" type="xml">
+            <tree string="Version History">
+                <field name="version"/>
+                <field name="user_id"/>
+                <field name="change_date"/>
+                <field name="change_note"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for BPMN Diagram Version -->
+    <record id="bpmn_diagram_version_view_form" model="ir.ui.view">
+        <field name="name">bpmn.diagram.version.view.form</field>
+        <field name="model">bpmn.diagram.version</field>
+        <field name="arch" type="xml">
+            <form string="Version History">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="diagram_id"/>
+                            <field name="version"/>
+                            <field name="user_id"/>
+                            <field name="change_date"/>
+                        </group>
+                        <group>
+                            <field name="change_note" placeholder="Describe the changes in this version..."/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="bpmn_xml" widget="text"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for BPMN Diagram Version History -->
+    <record id="action_bpmn_diagram_version" model="ir.actions.act_window">
+        <field name="name">Version History</field>
+        <field name="res_model">bpmn.diagram.version</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('diagram_id', '=', active_id)]</field>
+        <field name="context">{'default_diagram_id': active_id}</field>
+    </record>
+
+    <!-- Tree View for BPMN Diagram -->
+    <record id="bpmn_diagram_view_tree" model="ir.ui.view">
+        <field name="name">bpmn.diagram.view.tree</field>
+        <field name="model">bpmn.diagram</field>
+        <field name="arch" type="xml">
+            <tree string="BPMN Diagrams" decoration-info="state == 'review'" decoration-success="state == 'approved'" decoration-muted="state == 'archived'">
+                <field name="name"/>
+                <field name="version"/>
+                <field name="state" widget="badge" decoration-info="state == 'review'" decoration-success="state == 'approved'" decoration-warning="state == 'active'" decoration-muted="state == 'archived'"/>
+                <field name="category_id"/>
+                <field name="last_modified"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for BPMN Diagram -->
+    <record id="bpmn_diagram_view_form" model="ir.ui.view">
+        <field name="name">bpmn.diagram.view.form</field>
+        <field name="model">bpmn.diagram</field>
+        <field name="arch" type="xml">
+            <form string="BPMN Diagram">
+                <header>
+                    <button name="action_submit_for_review" string="Submit for Review" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_approve" string="Approve" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['draft', 'review'])]}"/>
+                    <button name="action_activate" string="Activate" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'approved')]}"/>
+                    <button name="action_archive" string="Archive" type="object" attrs="{'invisible': [('state', '==', 'archived')]}"/>
+                    <button name="action_unarchive" string="Unarchive" type="object" attrs="{'invisible': [('state', '!=', 'archived')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,review,approved,active"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_bpmn_diagram_version)d" type="action" class="oe_stat_button" icon="fa-history" context="{'default_diagram_id': id}">
+                            <field name="version_history_ids" widget="statinfo" string="Versions"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="version"/>
+                            <field name="category_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="template_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="approval_user_id" readonly="1" attrs="{'invisible': [('state', 'not in', ['approved', 'active'])]}"/>
+                            <field name="approval_date" readonly="1" attrs="{'invisible': [('state', 'not in', ['approved', 'active'])]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Describe this BPMN diagram..." attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </page>
+                        <page string="BPMN Modeler">
+                            <field name="bpmn_xml" widget="bpmn_modeler" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </page>
+                        <page string="Version History" name="versions">
+                            <field name="version_history_ids" readonly="1">
+                                <tree>
+                                    <field name="version"/>
+                                    <field name="user_id"/>
+                                    <field name="change_date"/>
+                                    <field name="change_note"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for BPMN Diagram -->
+    <record id="bpmn_diagram_action" model="ir.actions.act_window">
+        <field name="name">BPMN Diagrams</field>
+        <field name="res_model">bpmn.diagram</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first BPMN diagram!
+            </p>
+            <p>
+                Use templates to get started quickly, or create a diagram from scratch.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action to create from template -->
+    <record id="action_bpmn_diagram_from_template" model="ir.actions.act_window">
+        <field name="name">Create from Template</field>
+        <field name="res_model">bpmn.template.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Action for BPMN Diagram Category -->
+    <record id="bpmn_diagram_category_action" model="ir.actions.act_window">
+        <field name="name">Diagram Categories</field>
+        <field name="res_model">bpmn.diagram.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Root Menu Item -->
+    <menuitem
+        id="menu_bpmn_root"
+        name="BPMN"
+        sequence="100"
+        web_icon="bpmn_modeler,static/description/icon.png"/>
+
+    <!-- Submenu Item for BPMN Diagrams -->
+    <menuitem
+        id="menu_bpmn_diagram"
+        name="BPMN Diagrams"
+        parent="menu_bpmn_root"
+        action="bpmn_diagram_action"
+        sequence="10"/>
+    <menuitem
+        id="menu_bpmn_diagram_category"
+        name="Diagram Categories"
+        parent="menu_bpmn_root"
+        action="bpmn_diagram_category_action"
+        sequence="11"/>
+
+    <!-- Server Action: Create from Template -->
+    <record id="action_create_from_template" model="ir.actions.server">
+        <field name="name">Create from Template</field>
+        <field name="model_id" ref="model_bpmn_diagram"/>
+        <field name="binding_model_id" ref="model_bpmn_diagram"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = env['ir.actions.act_window']._for_xml_id('bpmn_modeler.action_bpmn_diagram_from_template')</field>
+    </record>
+
+</odoo>
