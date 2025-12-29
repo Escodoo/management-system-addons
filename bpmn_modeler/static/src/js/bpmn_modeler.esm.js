@@ -1,6 +1,13 @@
 /** @odoo-module **/
 
-import { Component, xml, onMounted, onWillUnmount, onWillUpdateProps, useRef } from "@odoo/owl";
+import {
+    Component,
+    onMounted,
+    onWillUnmount,
+    onWillUpdateProps,
+    useRef,
+    xml,
+} from "@odoo/owl";
 
 // IMPORTANT: This component assumes that the bpmn.js library (specifically BPMNModeler)
 // is loaded globally (e.g., via a script tag in the assets or a separate module).
@@ -15,12 +22,12 @@ export class BPMNModeler extends Component {
     `;
 
     static props = {
-        bpmn_xml: { type: String, optional: true },
-        readonly: { type: Boolean, optional: true, default: false },
-        onChange: { type: Function, optional: true },
-        onSVGChange: { type: Function, optional: true },
-        onReady: { type: Function, optional: true },
-        onValidationChange: { type: Function, optional: true },
+        bpmn_xml: {type: String, optional: true},
+        readonly: {type: Boolean, optional: true, default: false},
+        onChange: {type: Function, optional: true},
+        onSVGChange: {type: Function, optional: true},
+        onReady: {type: Function, optional: true},
+        onValidationChange: {type: Function, optional: true},
     };
 
     setup() {
@@ -42,10 +49,10 @@ export class BPMNModeler extends Component {
         onWillUnmount(() => {
             // Clean up event listeners
             if (this.canvasRef.el && this._keyboardHandler) {
-                this.canvasRef.el.removeEventListener('keydown', this._keyboardHandler);
+                this.canvasRef.el.removeEventListener("keydown", this._keyboardHandler);
             }
             if (this.canvasRef.el && this._wheelHandler) {
-                this.canvasRef.el.removeEventListener('wheel', this._wheelHandler);
+                this.canvasRef.el.removeEventListener("wheel", this._wheelHandler);
             }
 
             if (this.bpmnModeler) {
@@ -82,14 +89,17 @@ export class BPMNModeler extends Component {
             }
 
             // If library is not loaded via assets, try loading from CDN as fallback
-            console.warn("BPMN.js library not found in assets, loading from CDN as fallback");
+            console.warn(
+                "BPMN.js library not found in assets, loading from CDN as fallback"
+            );
 
             // Load CSS files first
             this._loadBpmnCss();
 
             // Load from CDN as fallback
             const script = document.createElement("script");
-            script.src = "https://unpkg.com/bpmn-js@18.9.1/dist/bpmn-modeler.development.js";
+            script.src =
+                "https://unpkg.com/bpmn-js@18.9.1/dist/bpmn-modeler.development.js";
             script.async = true;
             script.onload = () => {
                 console.log("BPMN.js modeler loaded successfully from CDN");
@@ -113,7 +123,7 @@ export class BPMNModeler extends Component {
         const cssFiles = [
             "https://unpkg.com/bpmn-js@18.9.1/dist/assets/diagram-js.css",
             "https://unpkg.com/bpmn-js@18.9.1/dist/assets/bpmn-js.css",
-            "https://unpkg.com/bpmn-js@18.9.1/dist/assets/bpmn-font/css/bpmn.css"
+            "https://unpkg.com/bpmn-js@18.9.1/dist/assets/bpmn-font/css/bpmn.css",
         ];
 
         // Load CSS files sequentially to ensure proper order
@@ -139,7 +149,7 @@ export class BPMNModeler extends Component {
                     };
                     link.onerror = () => {
                         console.warn(`Failed to load CSS: ${href}`);
-                        resolve(); // Continue even if one fails
+                        resolve();
                     };
 
                     document.head.appendChild(link);
@@ -161,8 +171,10 @@ export class BPMNModeler extends Component {
             await this._loadBpmnJs();
 
             // Check if bpmn.js library is available globally
-            if (typeof window.BpmnJS === 'undefined') {
-                console.error("BPMN library not found. Please ensure bpmn.js is loaded.");
+            if (typeof window.BpmnJS === "undefined") {
+                console.error(
+                    "BPMN library not found. Please ensure bpmn.js is loaded."
+                );
                 return;
             }
 
@@ -172,13 +184,13 @@ export class BPMNModeler extends Component {
                 container: this.canvasRef.el,
             });
 
-            this.bpmnModeler.on('commandStack.changed', () => {
+            this.bpmnModeler.on("commandStack.changed", () => {
                 this._saveDiagram();
                 this._updateValidationStats();
             });
 
             // Listen to diagram changes for validation
-            this.bpmnModeler.on('import.done', () => {
+            this.bpmnModeler.on("import.done", () => {
                 this._updateValidationStats();
             });
 
@@ -200,7 +212,7 @@ export class BPMNModeler extends Component {
                     exportSVG: () => this.exportSVG(),
                     exportPNG: () => this.exportPNG(),
                     exportPDF: () => this.exportPDF(),
-                    importDiagram: (xml) => this.importDiagram(xml),
+                    importDiagram: (xmlContent) => this.importDiagram(xmlContent),
                     zoomIn: () => this.zoomIn(),
                     zoomOut: () => this.zoomOut(),
                     zoomFit: () => this.zoomFit(),
@@ -213,7 +225,7 @@ export class BPMNModeler extends Component {
                 });
             }
 
-            this._importXML(this.props.bpmn_xml || '');
+            this._importXML(this.props.bpmn_xml || "");
         } catch (err) {
             console.error("Error initializing BPMN modeler:", err);
         }
@@ -221,7 +233,7 @@ export class BPMNModeler extends Component {
 
     /**
      * Imports BPMN XML into the modeler.
-     * @param {string} xmlString The BPMN XML string.
+     * @param {String} xmlString The BPMN XML string.
      * @private
      */
     async _importXML(xmlString) {
@@ -230,9 +242,9 @@ export class BPMNModeler extends Component {
         }
         try {
             await this.bpmnModeler.importXML(xmlString);
-            this.bpmnModeler.get('canvas').zoom('fit-viewport');
+            this.bpmnModeler.get("canvas").zoom("fit-viewport");
         } catch (err) {
-            console.error('could not import BPMN diagram', err);
+            console.error("could not import BPMN diagram", err);
         }
     }
 
@@ -246,30 +258,30 @@ export class BPMNModeler extends Component {
             return;
         }
         try {
-            const { xml } = await this.bpmnModeler.saveXML({ format: true });
+            const {xml: xmlContent} = await this.bpmnModeler.saveXML({format: true});
             if (this.props.onChange) {
-                this.props.onChange(xml);
+                this.props.onChange(xmlContent);
             }
 
             // Also generate SVG for preview
             try {
-                const { svg } = await this.bpmnModeler.saveSVG();
+                const {svg} = await this.bpmnModeler.saveSVG();
                 if (this.props.onSVGChange) {
                     this.props.onSVGChange(svg);
                 }
             } catch (svgErr) {
                 // SVG generation is optional, don't fail if it errors
-                console.warn('Could not generate SVG preview:', svgErr);
+                console.warn("Could not generate SVG preview:", svgErr);
             }
         } catch (err) {
-            console.error('could not save BPMN diagram', err);
+            console.error("could not save BPMN diagram", err);
         }
     }
 
     /**
      * Exports the current diagram as BPMN XML file.
      * @public
-     * @returns {Promise<string>} The BPMN XML string.
+     * @returns {Promise<String>} The BPMN XML string.
      */
     async exportDiagram() {
         if (!this.bpmnModeler) {
@@ -277,10 +289,10 @@ export class BPMNModeler extends Component {
             return null;
         }
         try {
-            const { xml } = await this.bpmnModeler.saveXML({ format: true });
-            return xml;
+            const {xml: xmlContent} = await this.bpmnModeler.saveXML({format: true});
+            return xmlContent;
         } catch (err) {
-            console.error('could not export BPMN diagram', err);
+            console.error("could not export BPMN diagram", err);
             return null;
         }
     }
@@ -288,20 +300,20 @@ export class BPMNModeler extends Component {
     /**
      * Imports a BPMN XML diagram.
      * @public
-     * @param {string} xml The BPMN XML string to import.
+     * @param {String} xmlContent The BPMN XML string to import.
      * @returns {Promise<void>}
      */
-    async importDiagram(xml) {
+    async importDiagram(xmlContent) {
         if (!this.bpmnModeler) {
             console.error("BPMN modeler not initialized");
             return;
         }
         try {
-            await this._importXML(xml);
+            await this._importXML(xmlContent);
             // Trigger save to update the field
             await this._saveDiagram();
         } catch (err) {
-            console.error('could not import BPMN diagram', err);
+            console.error("could not import BPMN diagram", err);
             throw err;
         }
     }
@@ -309,7 +321,7 @@ export class BPMNModeler extends Component {
     /**
      * Exports the current diagram as SVG.
      * @public
-     * @returns {Promise<string>} The SVG string.
+     * @returns {Promise<String>} The SVG string.
      */
     async exportSVG() {
         if (!this.bpmnModeler) {
@@ -318,8 +330,8 @@ export class BPMNModeler extends Component {
         }
         try {
             // Use saveSVG with options to ensure all elements are included
-            const { svg } = await this.bpmnModeler.saveSVG({
-                includeBpmnDI: true, // Include BPMN diagram interchange information
+            const {svg} = await this.bpmnModeler.saveSVG({
+                includeBpmnDI: true,
             });
 
             // Ensure SVG has proper dimensions and viewBox
@@ -328,71 +340,86 @@ export class BPMNModeler extends Component {
             }
             return svg;
         } catch (err) {
-            console.error('could not export SVG', err);
+            console.error("could not export SVG", err);
             return null;
         }
     }
 
     /**
      * Enhances SVG to ensure all elements are visible.
-     * @param {string} svg The SVG string.
-     * @returns {string} Enhanced SVG string.
+     * @param {String} svg The SVG string.
+     * @returns {String} Enhanced SVG string.
      * @private
      */
     _enhanceSVG(svg) {
         try {
             const parser = new DOMParser();
-            const svgDoc = parser.parseFromString(svg, 'image/svg+xml');
+            const svgDoc = parser.parseFromString(svg, "image/svg+xml");
             const svgElement = svgDoc.documentElement;
 
             // Ensure all paths, lines, and connections have proper stroke properties
-            const connections = svgDoc.querySelectorAll('path.djs-connection, path[class*="connection"], line, polyline');
-            connections.forEach(conn => {
+            const connections = svgDoc.querySelectorAll(
+                'path.djs-connection, path[class*="connection"], line, polyline'
+            );
+            connections.forEach((conn) => {
                 // Get computed styles from the actual rendered element if possible
                 const computedStyle = window.getComputedStyle(conn) || {};
-                const stroke = conn.getAttribute('stroke') || computedStyle.stroke || '#000000';
-                const strokeWidth = conn.getAttribute('stroke-width') || computedStyle.strokeWidth || '2';
+                const stroke =
+                    conn.getAttribute("stroke") || computedStyle.stroke || "#000000";
+                const strokeWidth =
+                    conn.getAttribute("stroke-width") ||
+                    computedStyle.strokeWidth ||
+                    "2";
 
-                conn.setAttribute('stroke', stroke);
-                conn.setAttribute('stroke-width', strokeWidth);
-                if (!conn.getAttribute('fill') || conn.getAttribute('fill') === 'none') {
-                    conn.setAttribute('fill', 'none');
+                conn.setAttribute("stroke", stroke);
+                conn.setAttribute("stroke-width", strokeWidth);
+                if (
+                    !conn.getAttribute("fill") ||
+                    conn.getAttribute("fill") === "none"
+                ) {
+                    conn.setAttribute("fill", "none");
                 }
             });
 
             // Ensure all paths (including connections) have stroke
-            const paths = svgDoc.querySelectorAll('path');
-            paths.forEach(path => {
+            const paths = svgDoc.querySelectorAll("path");
+            paths.forEach((path) => {
                 // Skip if already processed as connection
-                if (path.classList.contains('djs-connection') || path.getAttribute('class')?.includes('connection')) {
+                if (
+                    path.classList.contains("djs-connection") ||
+                    path.getAttribute("class")?.includes("connection")
+                ) {
                     return;
                 }
 
-                if (!path.getAttribute('stroke')) {
-                    path.setAttribute('stroke', '#000000');
+                if (!path.getAttribute("stroke")) {
+                    path.setAttribute("stroke", "#000000");
                 }
-                if (!path.getAttribute('stroke-width')) {
-                    path.setAttribute('stroke-width', '2');
+                if (!path.getAttribute("stroke-width")) {
+                    path.setAttribute("stroke-width", "2");
                 }
             });
 
             // Ensure viewBox exists
-            if (!svgElement.getAttribute('viewBox')) {
-                const width = parseFloat(svgElement.getAttribute('width')) || 1200;
-                const height = parseFloat(svgElement.getAttribute('height')) || 800;
-                svgElement.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            if (!svgElement.getAttribute("viewBox")) {
+                const width = parseFloat(svgElement.getAttribute("width")) || 1200;
+                const height = parseFloat(svgElement.getAttribute("height")) || 800;
+                svgElement.setAttribute("viewBox", `0 0 ${width} ${height}`);
             }
 
             // Add style element to ensure connections are visible
-            let styleElement = svgDoc.querySelector('style');
+            let styleElement = svgDoc.querySelector("style");
             if (!styleElement) {
-                styleElement = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement = svgDoc.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "style"
+                );
                 svgElement.insertBefore(styleElement, svgElement.firstChild);
             }
 
             // Add CSS rules for connections
-            const styleText = styleElement.textContent || '';
-            if (!styleText.includes('.djs-connection')) {
+            const styleText = styleElement.textContent || "";
+            if (!styleText.includes(".djs-connection")) {
                 const additionalStyles = `
                     .djs-connection { stroke: #000000 !important; stroke-width: 2px !important; fill: none !important; }
                     path.djs-connection { stroke: #000000 !important; stroke-width: 2px !important; fill: none !important; }
@@ -404,8 +431,8 @@ export class BPMNModeler extends Component {
             const serializer = new XMLSerializer();
             return serializer.serializeToString(svgElement);
         } catch (err) {
-            console.warn('Failed to enhance SVG:', err);
-            return svg; // Return original if enhancement fails
+            console.warn("Failed to enhance SVG:", err);
+            return svg;
         }
     }
 
@@ -417,7 +444,7 @@ export class BPMNModeler extends Component {
         if (!this.bpmnModeler) {
             return;
         }
-        const canvas = this.bpmnModeler.get('canvas');
+        const canvas = this.bpmnModeler.get("canvas");
         const currentZoom = canvas.zoom();
         canvas.zoom(Math.min(currentZoom * 1.2, 3));
     }
@@ -430,7 +457,7 @@ export class BPMNModeler extends Component {
         if (!this.bpmnModeler) {
             return;
         }
-        const canvas = this.bpmnModeler.get('canvas');
+        const canvas = this.bpmnModeler.get("canvas");
         const currentZoom = canvas.zoom();
         canvas.zoom(Math.max(currentZoom / 1.2, 0.2));
     }
@@ -443,8 +470,8 @@ export class BPMNModeler extends Component {
         if (!this.bpmnModeler) {
             return;
         }
-        const canvas = this.bpmnModeler.get('canvas');
-        canvas.zoom('fit-viewport');
+        const canvas = this.bpmnModeler.get("canvas");
+        canvas.zoom("fit-viewport");
     }
 
     /**
@@ -455,7 +482,7 @@ export class BPMNModeler extends Component {
         if (!this.bpmnModeler) {
             return;
         }
-        const canvas = this.bpmnModeler.get('canvas');
+        const canvas = this.bpmnModeler.get("canvas");
         canvas.zoom(1.0);
     }
 
@@ -467,7 +494,7 @@ export class BPMNModeler extends Component {
         if (!this.bpmnModeler || this.props.readonly) {
             return;
         }
-        const commandStack = this.bpmnModeler.get('commandStack');
+        const commandStack = this.bpmnModeler.get("commandStack");
         if (commandStack.canUndo()) {
             commandStack.undo();
         }
@@ -481,7 +508,7 @@ export class BPMNModeler extends Component {
         if (!this.bpmnModeler || this.props.readonly) {
             return;
         }
-        const commandStack = this.bpmnModeler.get('commandStack');
+        const commandStack = this.bpmnModeler.get("commandStack");
         if (commandStack.canRedo()) {
             commandStack.redo();
         }
@@ -490,26 +517,26 @@ export class BPMNModeler extends Component {
     /**
      * Checks if undo is available.
      * @public
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     canUndo() {
         if (!this.bpmnModeler || this.props.readonly) {
             return false;
         }
-        const commandStack = this.bpmnModeler.get('commandStack');
+        const commandStack = this.bpmnModeler.get("commandStack");
         return commandStack.canUndo();
     }
 
     /**
      * Checks if redo is available.
      * @public
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     canRedo() {
         if (!this.bpmnModeler || this.props.readonly) {
             return false;
         }
-        const commandStack = this.bpmnModeler.get('commandStack');
+        const commandStack = this.bpmnModeler.get("commandStack");
         return commandStack.canRedo();
     }
 
@@ -529,18 +556,18 @@ export class BPMNModeler extends Component {
             }
 
             // Check if we're not typing in an input field
-            if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA') {
+            if (ev.target.tagName === "INPUT" || ev.target.tagName === "TEXTAREA") {
                 return;
             }
 
             // Undo: Ctrl+Z or Cmd+Z
-            if (ev.key === 'z' && !ev.shiftKey) {
+            if (ev.key === "z" && !ev.shiftKey) {
                 ev.preventDefault();
                 this.undo();
             }
 
             // Redo: Ctrl+Y or Ctrl+Shift+Z or Cmd+Shift+Z
-            if ((ev.key === 'y') || (ev.key === 'z' && ev.shiftKey)) {
+            if (ev.key === "y" || (ev.key === "z" && ev.shiftKey)) {
                 ev.preventDefault();
                 this.redo();
             }
@@ -548,9 +575,9 @@ export class BPMNModeler extends Component {
 
         // Add event listener to canvas container
         if (this.canvasRef.el) {
-            this.canvasRef.el.addEventListener('keydown', this._keyboardHandler);
+            this.canvasRef.el.addEventListener("keydown", this._keyboardHandler);
             // Make canvas focusable for keyboard events
-            this.canvasRef.el.setAttribute('tabindex', '0');
+            this.canvasRef.el.setAttribute("tabindex", "0");
         }
     }
 
@@ -571,7 +598,7 @@ export class BPMNModeler extends Component {
 
             ev.preventDefault();
 
-            const canvas = this.bpmnModeler.get('canvas');
+            const canvas = this.bpmnModeler.get("canvas");
             const currentZoom = canvas.zoom();
             const delta = ev.deltaY > 0 ? 0.9 : 1.1;
             const newZoom = Math.max(0.2, Math.min(3, currentZoom * delta));
@@ -580,7 +607,7 @@ export class BPMNModeler extends Component {
             const rect = this.canvasRef.el.getBoundingClientRect();
             const center = {
                 x: ev.clientX - rect.left,
-                y: ev.clientY - rect.top
+                y: ev.clientY - rect.top,
             };
 
             canvas.zoom(newZoom, center);
@@ -588,7 +615,9 @@ export class BPMNModeler extends Component {
 
         // Add event listener to canvas container
         if (this.canvasRef.el) {
-            this.canvasRef.el.addEventListener('wheel', this._wheelHandler, { passive: false });
+            this.canvasRef.el.addEventListener("wheel", this._wheelHandler, {
+                passive: false,
+            });
         }
     }
 
@@ -603,14 +632,14 @@ export class BPMNModeler extends Component {
 
         // Check if minimap module is available
         try {
-            const minimap = this.bpmnModeler.get('minimap', false);
+            const minimap = this.bpmnModeler.get("minimap", false);
             if (minimap) {
                 // Minimap is already integrated in bpmn.js
-                console.log('Minimap available');
+                console.log("Minimap available");
             }
         } catch (err) {
             // Minimap module not available, that's okay
-            console.debug('Minimap not available');
+            console.debug("Minimap not available");
         }
     }
 
@@ -625,7 +654,7 @@ export class BPMNModeler extends Component {
         }
 
         try {
-            const elementRegistry = this.bpmnModeler.get('elementRegistry');
+            const elementRegistry = this.bpmnModeler.get("elementRegistry");
             const elements = elementRegistry.getAll();
 
             const stats = {
@@ -639,28 +668,28 @@ export class BPMNModeler extends Component {
                 annotations: 0,
             };
 
-            elements.forEach(element => {
-                const type = element.type || '';
-                if (type.includes('StartEvent')) {
+            elements.forEach((element) => {
+                const type = element.type || "";
+                if (type.includes("StartEvent")) {
                     stats.startEvents++;
-                } else if (type.includes('EndEvent')) {
+                } else if (type.includes("EndEvent")) {
                     stats.endEvents++;
-                } else if (type.includes('Task')) {
+                } else if (type.includes("Task")) {
                     stats.tasks++;
-                } else if (type.includes('Gateway')) {
+                } else if (type.includes("Gateway")) {
                     stats.gateways++;
-                } else if (type.includes('SequenceFlow')) {
+                } else if (type.includes("SequenceFlow")) {
                     stats.sequenceFlows++;
-                } else if (type.includes('DataObject')) {
+                } else if (type.includes("DataObject")) {
                     stats.dataObjects++;
-                } else if (type.includes('TextAnnotation')) {
+                } else if (type.includes("TextAnnotation")) {
                     stats.annotations++;
                 }
             });
 
             return stats;
         } catch (err) {
-            console.error('Error getting validation stats:', err);
+            console.error("Error getting validation stats:", err);
             return null;
         }
     }
@@ -687,14 +716,14 @@ export class BPMNModeler extends Component {
             return null;
         }
         try {
-            const { svg } = await this.bpmnModeler.saveSVG({
+            const {svg} = await this.bpmnModeler.saveSVG({
                 includeBpmnDI: true,
             });
             // Enhance SVG to ensure all connections are visible
             const enhancedSvg = this._enhanceSVG(svg);
             return await this._svgToPNG(enhancedSvg);
         } catch (err) {
-            console.error('could not export PNG', err);
+            console.error("could not export PNG", err);
             return null;
         }
     }
@@ -710,21 +739,21 @@ export class BPMNModeler extends Component {
             return null;
         }
         try {
-            const { svg } = await this.bpmnModeler.saveSVG({
+            const {svg} = await this.bpmnModeler.saveSVG({
                 includeBpmnDI: true,
             });
             // Enhance SVG to ensure all connections are visible
             const enhancedSvg = this._enhanceSVG(svg);
             return await this._svgToPDF(enhancedSvg);
         } catch (err) {
-            console.error('could not export PDF', err);
+            console.error("could not export PDF", err);
             return null;
         }
     }
 
     /**
      * Converts SVG to PNG.
-     * @param {string} svg The SVG string.
+     * @param {String} svg The SVG string.
      * @returns {Promise<Blob>} The PNG blob.
      * @private
      */
@@ -733,21 +762,21 @@ export class BPMNModeler extends Component {
             try {
                 // Parse SVG to get dimensions
                 const parser = new DOMParser();
-                const svgDoc = parser.parseFromString(svg, 'image/svg+xml');
+                const svgDoc = parser.parseFromString(svg, "image/svg+xml");
                 const svgElement = svgDoc.documentElement;
 
                 // Get viewBox or width/height from SVG
                 let width = 0;
                 let height = 0;
 
-                const viewBox = svgElement.getAttribute('viewBox');
+                const viewBox = svgElement.getAttribute("viewBox");
                 if (viewBox) {
                     const parts = viewBox.split(/\s+|,/);
                     width = parseFloat(parts[2]) || 1200;
                     height = parseFloat(parts[3]) || 800;
                 } else {
-                    width = parseFloat(svgElement.getAttribute('width')) || 1200;
-                    height = parseFloat(svgElement.getAttribute('height')) || 800;
+                    width = parseFloat(svgElement.getAttribute("width")) || 1200;
+                    height = parseFloat(svgElement.getAttribute("height")) || 800;
                 }
 
                 // Ensure minimum dimensions
@@ -755,9 +784,9 @@ export class BPMNModeler extends Component {
                 height = Math.max(height, 800);
 
                 // Set explicit width and height on SVG for rendering
-                svgElement.setAttribute('width', width);
-                svgElement.setAttribute('height', height);
-                svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                svgElement.setAttribute("width", width);
+                svgElement.setAttribute("height", height);
+                svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 
                 // Create serialized SVG with explicit dimensions
                 const serializer = new XMLSerializer();
@@ -765,23 +794,25 @@ export class BPMNModeler extends Component {
 
                 // Create image from SVG
                 const img = new Image();
-                const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                const svgBlob = new Blob([svgString], {
+                    type: "image/svg+xml;charset=utf-8",
+                });
                 const url = URL.createObjectURL(svgBlob);
 
                 img.onload = () => {
                     // Use higher resolution for better quality
-                    const scale = 2; // 2x resolution for crisp lines
-                    const canvas = document.createElement('canvas');
+                    const scale = 2;
+                    const canvas = document.createElement("canvas");
                     canvas.width = width * scale;
                     canvas.height = height * scale;
-                    const ctx = canvas.getContext('2d');
+                    const ctx = canvas.getContext("2d");
 
                     // Enable high-quality rendering
                     ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
+                    ctx.imageSmoothingQuality = "high";
 
                     // Fill white background
-                    ctx.fillStyle = '#ffffff';
+                    ctx.fillStyle = "#ffffff";
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                     // Scale context for high DPI
@@ -790,25 +821,29 @@ export class BPMNModeler extends Component {
                     // Draw the image
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    canvas.toBlob((blob) => {
-                        URL.revokeObjectURL(url);
-                        if (blob) {
-                            resolve(blob);
-                        } else {
-                            reject(new Error('Failed to convert SVG to PNG'));
-                        }
-                    }, 'image/png', 1.0); // Maximum quality
+                    canvas.toBlob(
+                        (blob) => {
+                            URL.revokeObjectURL(url);
+                            if (blob) {
+                                resolve(blob);
+                            } else {
+                                reject(new Error("Failed to convert SVG to PNG"));
+                            }
+                        },
+                        "image/png",
+                        1.0
+                    );
                 };
 
                 img.onerror = (err) => {
                     URL.revokeObjectURL(url);
-                    console.error('SVG image load error:', err);
-                    reject(new Error('Failed to load SVG image'));
+                    console.error("SVG image load error:", err);
+                    reject(new Error("Failed to load SVG image"));
                 };
 
                 img.src = url;
             } catch (err) {
-                console.error('SVG to PNG conversion error:', err);
+                console.error("SVG to PNG conversion error:", err);
                 reject(err);
             }
         });
@@ -816,7 +851,7 @@ export class BPMNModeler extends Component {
 
     /**
      * Converts SVG to PDF using jsPDF library.
-     * @param {string} svg The SVG string.
+     * @param {String} svg The SVG string.
      * @returns {Promise<Blob>} The PDF blob.
      * @private
      */
@@ -829,8 +864,8 @@ export class BPMNModeler extends Component {
         const imgDataUrl = await this._blobToDataURL(pngBlob);
 
         // Create PDF using jsPDF
-        if (typeof window.jspdf !== 'undefined') {
-            const { jsPDF } = window.jspdf;
+        if (typeof window.jspdf !== "undefined") {
+            const {jsPDF} = window.jspdf;
 
             // Get image dimensions first
             const img = new Image();
@@ -843,9 +878,9 @@ export class BPMNModeler extends Component {
             // Determine orientation based on image dimensions
             const isLandscape = img.width > img.height;
             const pdf = new jsPDF({
-                orientation: isLandscape ? 'landscape' : 'portrait',
-                unit: 'mm',
-                format: 'a4'
+                orientation: isLandscape ? "landscape" : "portrait",
+                unit: "mm",
+                format: "a4",
             });
 
             // Calculate dimensions to fit page
@@ -866,13 +901,12 @@ export class BPMNModeler extends Component {
             const x = (pdfWidth - scaledWidth) / 2;
             const y = (pdfHeight - scaledHeight) / 2;
 
-            pdf.addImage(imgDataUrl, 'PNG', x, y, scaledWidth, scaledHeight);
-            return pdf.output('blob');
-        } else {
-            // Fallback: return PNG if jsPDF is not available
-            console.warn('jsPDF not available, returning PNG instead');
-            return pngBlob;
+            pdf.addImage(imgDataUrl, "PNG", x, y, scaledWidth, scaledHeight);
+            return pdf.output("blob");
         }
+        // Fallback: return PNG if jsPDF is not available
+        console.warn("jsPDF not available, returning PNG instead");
+        return pngBlob;
     }
 
     /**
@@ -881,31 +915,32 @@ export class BPMNModeler extends Component {
      * @private
      */
     async _loadJsPDF() {
-        if (typeof window.jspdf !== 'undefined') {
-            return; // Already loaded
+        if (typeof window.jspdf !== "undefined") {
+            return;
         }
 
         return new Promise((resolve, reject) => {
             // Check if script already exists
             const existingScript = document.querySelector('script[src*="jspdf"]');
             if (existingScript) {
-                existingScript.addEventListener('load', resolve);
-                existingScript.addEventListener('error', reject);
+                existingScript.addEventListener("load", resolve);
+                existingScript.addEventListener("error", reject);
                 return;
             }
 
             // Load jsPDF from CDN
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+            const script = document.createElement("script");
+            script.src =
+                "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
             script.async = true;
             script.onload = () => {
-                if (typeof window.jspdf !== 'undefined') {
-                    resolve();
+                if (typeof window.jspdf === "undefined") {
+                    reject(new Error("jsPDF failed to load"));
                 } else {
-                    reject(new Error('jsPDF failed to load'));
+                    resolve();
                 }
             };
-            script.onerror = () => reject(new Error('Failed to load jsPDF library'));
+            script.onerror = () => reject(new Error("Failed to load jsPDF library"));
             document.head.appendChild(script);
         });
     }
@@ -913,7 +948,7 @@ export class BPMNModeler extends Component {
     /**
      * Converts a blob to data URL.
      * @param {Blob} blob The blob to convert.
-     * @returns {Promise<string>} The data URL.
+     * @returns {Promise<String>} The data URL.
      * @private
      */
     _blobToDataURL(blob) {
