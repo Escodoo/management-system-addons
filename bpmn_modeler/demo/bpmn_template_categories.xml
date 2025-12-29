@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data noupdate="1">
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
         <!-- Business Process Templates -->
         <record id="bpmn_template_category_business" model="bpmn.template.category">
             <field name="name">Business Processes</field>
@@ -11,7 +10,9 @@
         <!-- Workflow Templates -->
         <record id="bpmn_template_category_workflow" model="bpmn.template.category">
             <field name="name">Workflows</field>
-            <field name="description">Templates for approval and workflow processes</field>
+            <field
+            name="description"
+        >Templates for approval and workflow processes</field>
             <field name="sequence">20</field>
         </record>
 
@@ -28,5 +29,4 @@
             <field name="description">Templates for human resources processes</field>
             <field name="sequence">40</field>
         </record>
-    </data>
 </odoo>

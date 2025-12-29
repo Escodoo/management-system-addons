@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <!-- Tree View for BPMN Diagram Version -->
     <record id="bpmn_diagram_version_view_tree" model="ir.ui.view">
         <field name="name">bpmn.diagram.version.view.tree</field>
         <field name="model">bpmn.diagram.version</field>
         <field name="arch" type="xml">
-            <tree string="Version History">
-                <field name="version"/>
-                <field name="user_id"/>
-                <field name="change_date"/>
-                <field name="change_note"/>
+            <tree>
+                <field name="version" />
+                <field name="user_id" />
+                <field name="change_date" />
+                <field name="change_note" />
             </tree>
         </field>
     </record>
@@ -23,17 +23,20 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="diagram_id"/>
-                            <field name="version"/>
-                            <field name="user_id"/>
-                            <field name="change_date"/>
+                            <field name="diagram_id" />
+                            <field name="version" />
+                            <field name="user_id" />
+                            <field name="change_date" />
                         </group>
                         <group>
-                            <field name="change_note" placeholder="Describe the changes in this version..."/>
+                            <field
+                                name="change_note"
+                                placeholder="Describe the changes in this version..."
+                            />
                         </group>
                     </group>
                     <group>
-                        <field name="bpmn_xml" widget="text"/>
+                        <field name="bpmn_xml" widget="text" />
                     </group>
                 </sheet>
             </form>
@@ -54,12 +57,23 @@
         <field name="name">bpmn.diagram.view.tree</field>
         <field name="model">bpmn.diagram</field>
         <field name="arch" type="xml">
-            <tree string="BPMN Diagrams" decoration-info="state == 'review'" decoration-success="state == 'approved'" decoration-muted="state == 'archived'">
-                <field name="name"/>
-                <field name="version"/>
-                <field name="state" widget="badge" decoration-info="state == 'review'" decoration-success="state == 'approved'" decoration-warning="state == 'active'" decoration-muted="state == 'archived'"/>
-                <field name="category_id"/>
-                <field name="last_modified"/>
+            <tree
+                decoration-info="state == 'review'"
+                decoration-success="state == 'approved'"
+                decoration-muted="state == 'archived'"
+            >
+                <field name="name" />
+                <field name="version" />
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-info="state == 'review'"
+                    decoration-success="state == 'approved'"
+                    decoration-warning="state == 'active'"
+                    decoration-muted="state == 'archived'"
+                />
+                <field name="category_id" />
+                <field name="last_modified" />
             </tree>
         </field>
     </record>
@@ -71,51 +85,115 @@
         <field name="arch" type="xml">
             <form string="BPMN Diagram">
                 <header>
-                    <button name="action_submit_for_review" string="Submit for Review" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
-                    <button name="action_approve" string="Approve" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['draft', 'review'])]}"/>
-                    <button name="action_activate" string="Activate" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'approved')]}"/>
-                    <button name="action_archive" string="Archive" type="object" attrs="{'invisible': [('state', '==', 'archived')]}"/>
-                    <button name="action_unarchive" string="Unarchive" type="object" attrs="{'invisible': [('state', '!=', 'archived')]}"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,review,approved,active"/>
+                    <button
+                        name="action_submit_for_review"
+                        string="Submit for Review"
+                        type="object"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"
+                    />
+                    <button
+                        name="action_approve"
+                        string="Approve"
+                        type="object"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('state', 'not in', ['draft', 'review'])]}"
+                    />
+                    <button
+                        name="action_activate"
+                        string="Activate"
+                        type="object"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('state', '!=', 'approved')]}"
+                    />
+                    <button
+                        name="action_archive"
+                        string="Archive"
+                        type="object"
+                        attrs="{'invisible': [('state', '==', 'archived')]}"
+                    />
+                    <button
+                        name="action_unarchive"
+                        string="Unarchive"
+                        type="object"
+                        attrs="{'invisible': [('state', '!=', 'archived')]}"
+                    />
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,review,approved,active"
+                    />
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="%(action_bpmn_diagram_version)d" type="action" class="oe_stat_button" icon="fa-history" context="{'default_diagram_id': id}">
-                            <field name="version_history_ids" widget="statinfo" string="Versions"/>
+                        <button
+                            name="%(action_bpmn_diagram_version)d"
+                            type="action"
+                            class="oe_stat_button"
+                            icon="fa-history"
+                            context="{'default_diagram_id': id}"
+                        >
+                            <field
+                                name="version_history_ids"
+                                widget="statinfo"
+                                string="Versions"
+                            />
                         </button>
                     </div>
                     <group>
                         <group>
-                            <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                            <field name="version"/>
-                            <field name="category_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                            <field name="template_id" readonly="1"/>
+                            <field
+                                name="name"
+                                attrs="{'readonly': [('state', '!=', 'draft')]}"
+                            />
+                            <field name="version" />
+                            <field
+                                name="category_id"
+                                attrs="{'readonly': [('state', '!=', 'draft')]}"
+                            />
+                            <field name="template_id" readonly="1" />
                         </group>
                         <group>
-                            <field name="approval_user_id" readonly="1" attrs="{'invisible': [('state', 'not in', ['approved', 'active'])]}"/>
-                            <field name="approval_date" readonly="1" attrs="{'invisible': [('state', 'not in', ['approved', 'active'])]}"/>
+                            <field
+                                name="approval_user_id"
+                                readonly="1"
+                                attrs="{'invisible': [('state', 'not in', ['approved', 'active'])]}"
+                            />
+                            <field
+                                name="approval_date"
+                                readonly="1"
+                                attrs="{'invisible': [('state', 'not in', ['approved', 'active'])]}"
+                            />
                         </group>
                     </group>
                     <notebook>
                         <page string="Description">
-                            <field name="description" placeholder="Describe this BPMN diagram..." attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field
+                                name="description"
+                                placeholder="Describe this BPMN diagram..."
+                                attrs="{'readonly': [('state', '!=', 'draft')]}"
+                            />
                         </page>
                         <page string="BPMN Modeler">
-                            <field name="bpmn_xml" widget="bpmn_modeler" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field
+                                name="bpmn_xml"
+                                widget="bpmn_modeler"
+                                attrs="{'readonly': [('state', '!=', 'draft')]}"
+                            />
                         </page>
                         <page string="Version History" name="versions">
                             <field name="version_history_ids" readonly="1">
                                 <tree>
-                                    <field name="version"/>
-                                    <field name="user_id"/>
-                                    <field name="change_date"/>
-                                    <field name="change_note"/>
+                                    <field name="version" />
+                                    <field name="user_id" />
+                                    <field name="change_date" />
+                                    <field name="change_note" />
                                 </tree>
                             </field>
                         </page>
                     </notebook>
                 </sheet>
-                <chatter/>
+                <chatter />
             </form>
         </field>
     </record>
@@ -156,7 +234,8 @@
         id="menu_bpmn_root"
         name="BPMN"
         sequence="100"
-        web_icon="bpmn_modeler,static/description/icon.png"/>
+        web_icon="bpmn_modeler,static/description/icon.png"
+    />
 
     <!-- Submenu Item for BPMN Diagrams -->
     <menuitem
@@ -164,22 +243,53 @@
         name="BPMN Diagrams"
         parent="menu_bpmn_root"
         action="bpmn_diagram_action"
-        sequence="10"/>
+        sequence="10"
+    />
     <menuitem
         id="menu_bpmn_diagram_category"
         name="Diagram Categories"
         parent="menu_bpmn_root"
         action="bpmn_diagram_category_action"
-        sequence="11"/>
+        sequence="11"
+    />
 
-    <!-- Server Action: Create from Template -->
-    <record id="action_create_from_template" model="ir.actions.server">
-        <field name="name">Create from Template</field>
-        <field name="model_id" ref="model_bpmn_diagram"/>
-        <field name="binding_model_id" ref="model_bpmn_diagram"/>
-        <field name="binding_view_types">list</field>
-        <field name="state">code</field>
-        <field name="code">action = env['ir.actions.act_window']._for_xml_id('bpmn_modeler.action_bpmn_diagram_from_template')</field>
+    <!-- Template Actions (moved here to ensure they're available for menus) -->
+    <record id="bpmn_template_category_action" model="ir.actions.act_window">
+        <field name="name">Template Categories</field>
+        <field name="res_model">bpmn.template.category</field>
+        <field name="view_mode">tree,form</field>
     </record>
+
+    <record id="bpmn_template_action" model="ir.actions.act_window">
+        <field name="name">BPMN Templates</field>
+        <field name="res_model">bpmn.template</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('active', '=', True)]</field>
+        <field name="context">{'search_default_category_id': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first BPMN template!
+            </p>
+            <p>
+                Templates help you quickly create new diagrams with predefined structures.
+            </p>
+        </field>
+    </record>
+
+    <!-- Template Menu Items (moved here to ensure menu_bpmn_root exists) -->
+    <menuitem
+        id="menu_bpmn_template"
+        name="Templates"
+        parent="menu_bpmn_root"
+        action="bpmn_template_action"
+        sequence="20"
+    />
+    <menuitem
+        id="menu_bpmn_template_category"
+        name="Template Categories"
+        parent="menu_bpmn_root"
+        action="bpmn_template_category_action"
+        sequence="21"
+    />
 
 </odoo>

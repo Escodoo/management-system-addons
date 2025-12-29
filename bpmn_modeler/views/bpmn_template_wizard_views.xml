@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <!-- Form View for BPMN Template Wizard -->
     <record id="bpmn_template_wizard_view_form" model="ir.ui.view">
@@ -7,13 +7,22 @@
         <field name="arch" type="xml">
             <form string="Select Template">
                 <group>
-                    <field name="template_id" options="{'no_create': True}" widget="many2one"/>
-                    <field name="name"/>
-                    <field name="description" placeholder="Optional description..."/>
+                    <field
+                        name="template_id"
+                        options="{'no_create': True}"
+                        widget="many2one"
+                    />
+                    <field name="name" />
+                    <field name="description" placeholder="Optional description..." />
                 </group>
                 <footer>
-                    <button string="Create Diagram" name="action_create_diagram" type="object" class="btn-primary"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    <button
+                        string="Create Diagram"
+                        name="action_create_diagram"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
                 </footer>
             </form>
         </field>
@@ -25,22 +34,6 @@
         <field name="res_model">bpmn.template.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-    </record>
-
-    <!-- Update BPMN Diagram Action to include template wizard -->
-    <record id="bpmn_diagram_action" model="ir.actions.act_window">
-        <field name="name">BPMN Diagrams</field>
-        <field name="res_model">bpmn.diagram</field>
-        <field name="view_mode">tree,form</field>
-        <field name="context">{'search_default_active': 1}</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create your first BPMN diagram!
-            </p>
-            <p>
-                Use templates to get started quickly, or create a diagram from scratch.
-            </p>
-        </field>
     </record>
 
 </odoo>
