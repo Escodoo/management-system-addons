@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <!-- Simple Decision Template -->
+    <record id="dmn_template_simple_decision" model="dmn.template">
+        <field name="name">Simple Decision</field>
+        <field
+            name="description"
+        >A basic decision table with one input and one output</field>
+        <field name="category_id" ref="dmn_template_category_business" />
+        <field name="icon">fa-table</field>
+        <field name="sequence">10</field>
+        <field
+            name="xml_content"
+        ><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<dmn:definitions xmlns:dmn="https://www.omg.org/spec/DMN/20191111/MODEL/"
+                xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+                xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+                xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/"
+                id="Definitions_1"
+                namespace="http://camunda.org/schema/1.0/dmn"
+                exporter="dmn-js"
+                exporterVersion="17.5.0">
+  <dmn:decision id="Decision_1" name="Simple Decision">
+    <dmn:decisionTable id="DecisionTable_1">
+      <dmn:input id="Input_1" label="Input">
+        <dmn:inputExpression id="InputExpression_1" typeRef="string">
+          <dmn:text></dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:output id="Output_1" label="Output" typeRef="string"/>
+      <dmn:rule id="Rule_1">
+        <dmn:inputEntry id="InputEntry_1">
+          <dmn:text></dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="OutputEntry_1">
+          <dmn:text></dmn:text>
+        </dmn:outputEntry>
+      </dmn:rule>
+    </dmn:decisionTable>
+  </dmn:decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1">
+      <dmndi:DMNShape id="DMNShape_Decision_1" dmnElementRef="Decision_1">
+        <dc:Bounds height="80" width="180" x="100" y="100"/>
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</dmn:definitions>]]></field>
+    </record>
+
+    <!-- Approval Decision Template -->
+    <record id="dmn_template_approval_decision" model="dmn.template">
+        <field name="name">Approval Decision</field>
+        <field name="description">A decision table for approval workflows</field>
+        <field name="category_id" ref="dmn_template_category_approval" />
+        <field name="icon">fa-check-circle</field>
+        <field name="sequence">20</field>
+        <field
+            name="xml_content"
+        ><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<dmn:definitions xmlns:dmn="https://www.omg.org/spec/DMN/20191111/MODEL/"
+                xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+                xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+                xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/"
+                id="Definitions_1"
+                namespace="http://camunda.org/schema/1.0/dmn"
+                exporter="dmn-js"
+                exporterVersion="17.5.0">
+  <dmn:decision id="Decision_Approval" name="Approval Decision">
+    <dmn:decisionTable id="DecisionTable_Approval">
+      <dmn:input id="Input_Amount" label="Amount">
+        <dmn:inputExpression id="InputExpression_Amount" typeRef="double">
+          <dmn:text>amount</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:output id="Output_Approval" label="Approval Required" typeRef="boolean"/>
+      <dmn:rule id="Rule_1">
+        <dmn:inputEntry id="InputEntry_1">
+          <dmn:text>&lt; 1000</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="OutputEntry_1">
+          <dmn:text>false</dmn:text>
+        </dmn:outputEntry>
+      </dmn:rule>
+      <dmn:rule id="Rule_2">
+        <dmn:inputEntry id="InputEntry_2">
+          <dmn:text>&gt;= 1000</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="OutputEntry_2">
+          <dmn:text>true</dmn:text>
+        </dmn:outputEntry>
+      </dmn:rule>
+    </dmn:decisionTable>
+  </dmn:decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1">
+      <dmndi:DMNShape id="DMNShape_Decision_Approval" dmnElementRef="Decision_Approval">
+        <dc:Bounds height="80" width="180" x="100" y="100"/>
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</dmn:definitions>]]></field>
+    </record>
+</odoo>

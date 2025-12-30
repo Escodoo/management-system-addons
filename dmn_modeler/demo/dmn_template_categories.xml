@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <!-- Business Decision Templates -->
+    <record id="dmn_template_category_business" model="dmn.template.category">
+        <field name="name">Business Decisions</field>
+        <field name="description">Templates for common business decision tables</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- Approval Decision Templates -->
+    <record id="dmn_template_category_approval" model="dmn.template.category">
+        <field name="name">Approval Decisions</field>
+        <field name="description">Templates for approval and workflow decisions</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- IT Decision Templates -->
+    <record id="dmn_template_category_it" model="dmn.template.category">
+        <field name="name">IT Decisions</field>
+        <field name="description">Templates for IT and technical decisions</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <!-- HR Decision Templates -->
+    <record id="dmn_template_category_hr" model="dmn.template.category">
+        <field name="name">HR Decisions</field>
+        <field name="description">Templates for human resources decisions</field>
+        <field name="sequence">40</field>
+    </record>
+</odoo>
