@@ -71,7 +71,7 @@ export class DMNModeler extends Component {
             // Check if already loaded (from assets or previous load)
             if (window.DmnJS) {
                 // Load CSS if not already loaded
-                this._loadBpmnCss();
+                this._loadDmnCss();
                 resolve();
                 return;
             }
@@ -81,7 +81,7 @@ export class DMNModeler extends Component {
                 const checkLoaded = setInterval(() => {
                     if (window.DmnJS) {
                         clearInterval(checkLoaded);
-                        this._loadBpmnCss();
+                        this._loadDmnCss();
                         resolve();
                     }
                 }, 100);
@@ -94,7 +94,7 @@ export class DMNModeler extends Component {
             );
 
             // Load CSS files first
-            this._loadBpmnCss();
+            this._loadDmnCss();
 
             // Load from CDN as fallback
             const script = document.createElement("script");
@@ -330,10 +330,9 @@ export class DMNModeler extends Component {
             return null;
         }
         try {
-            // Use saveSVG with options to ensure all elements are included
-            const {svg} = await this.dmnModeler.saveSVG({
-                includeBpmnDI: true,
-            });
+            // Use saveSVG to export DMN diagram as SVG
+            // DMN uses DMNDI (DMN Diagram Interchange) by default
+            const {svg} = await this.dmnModeler.saveSVG();
 
             // Ensure SVG has proper dimensions and viewBox
             if (svg) {
@@ -714,9 +713,8 @@ export class DMNModeler extends Component {
             return null;
         }
         try {
-            const {svg} = await this.dmnModeler.saveSVG({
-                includeBpmnDI: true,
-            });
+            // Export DMN diagram as SVG (DMNDI is included by default)
+            const {svg} = await this.dmnModeler.saveSVG();
             // Enhance SVG to ensure all connections are visible
             const enhancedSvg = this._enhanceSVG(svg);
             return await this._svgToPNG(enhancedSvg);
@@ -737,9 +735,8 @@ export class DMNModeler extends Component {
             return null;
         }
         try {
-            const {svg} = await this.dmnModeler.saveSVG({
-                includeBpmnDI: true,
-            });
+            // Export DMN diagram as SVG (DMNDI is included by default)
+            const {svg} = await this.dmnModeler.saveSVG();
             // Enhance SVG to ensure all connections are visible
             const enhancedSvg = this._enhanceSVG(svg);
             return await this._svgToPDF(enhancedSvg);

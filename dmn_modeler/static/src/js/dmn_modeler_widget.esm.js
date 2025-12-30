@@ -167,7 +167,7 @@ export class DmnModelerWidget extends Component {
      * @param {Object} api The API object with export method.
      * @private
      */
-    _onBpmnReady(api) {
+    _onDmnReady(api) {
         this.dmnApi = api;
         // Update validation stats when modeler is ready
         this._updateValidationStats();
