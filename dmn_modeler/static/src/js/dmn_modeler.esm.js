@@ -185,12 +185,14 @@ export class DMNModeler extends Component {
                 container: this.canvasRef.el,
             });
 
+            // Setup event listeners first
             this.dmnModeler.on("commandStack.changed", () => {
                 this._saveDiagram();
                 this._updateValidationStats();
             });
 
             // Listen to diagram changes for validation
+            // This event is fired when the modeler is ready and has imported XML
             this.dmnModeler.on("import.done", () => {
                 this._updateValidationStats();
             });
@@ -226,7 +228,9 @@ export class DMNModeler extends Component {
                 });
             }
 
-            this._importXML(this.props.dmn_xml || "");
+            // Import XML - this will initialize the modeler
+            // The import.done event will be fired when ready
+            await this._importXML(this.props.dmn_xml || "");
         } catch (err) {
             console.error("Error initializing DMN modeler:", err);
         }
@@ -243,7 +247,13 @@ export class DMNModeler extends Component {
         }
         try {
             await this.dmnModeler.importXML(xmlString);
-            this.dmnModeler.get("canvas").zoom("fit-viewport");
+            // Check if get method is available before using it
+            if (typeof this.dmnModeler.get === "function") {
+                const canvas = this.dmnModeler.get("canvas");
+                if (canvas && typeof canvas.zoom === "function") {
+                    canvas.zoom("fit-viewport");
+                }
+            }
         } catch (err) {
             console.error("could not import DMN diagram", err);
         }
@@ -259,20 +269,28 @@ export class DMNModeler extends Component {
             return;
         }
         try {
+            // Check if saveXML method is available
+            if (typeof this.dmnModeler.saveXML !== "function") {
+                console.warn("DMN modeler saveXML method not available");
+                return;
+            }
+
             const {xml: xmlContent} = await this.dmnModeler.saveXML({format: true});
             if (this.props.onChange) {
                 this.props.onChange(xmlContent);
             }
 
-            // Also generate SVG for preview
-            try {
-                const {svg} = await this.dmnModeler.saveSVG();
-                if (this.props.onSVGChange) {
-                    this.props.onSVGChange(svg);
+            // Also generate SVG for preview (only if saveSVG is available)
+            if (typeof this.dmnModeler.saveSVG === "function") {
+                try {
+                    const {svg} = await this.dmnModeler.saveSVG();
+                    if (this.props.onSVGChange) {
+                        this.props.onSVGChange(svg);
+                    }
+                } catch (svgErr) {
+                    // SVG generation is optional, don't fail if it errors
+                    console.warn("Could not generate SVG preview:", svgErr);
                 }
-            } catch (svgErr) {
-                // SVG generation is optional, don't fail if it errors
-                console.warn("Could not generate SVG preview:", svgErr);
             }
         } catch (err) {
             console.error("could not save DMN diagram", err);
@@ -287,6 +305,10 @@ export class DMNModeler extends Component {
     async exportDiagram() {
         if (!this.dmnModeler) {
             console.error("DMN modeler not initialized");
+            return null;
+        }
+        if (typeof this.dmnModeler.saveXML !== "function") {
+            console.error("DMN modeler saveXML method not available");
             return null;
         }
         try {
@@ -327,6 +349,10 @@ export class DMNModeler extends Component {
     async exportSVG() {
         if (!this.dmnModeler) {
             console.error("DMN modeler not initialized");
+            return null;
+        }
+        if (typeof this.dmnModeler.saveSVG !== "function") {
+            console.error("DMN modeler saveSVG method not available");
             return null;
         }
         try {
@@ -441,12 +467,14 @@ export class DMNModeler extends Component {
      * @public
      */
     zoomIn() {
-        if (!this.dmnModeler) {
+        if (!this.dmnModeler || typeof this.dmnModeler.get !== "function") {
             return;
         }
         const canvas = this.dmnModeler.get("canvas");
-        const currentZoom = canvas.zoom();
-        canvas.zoom(Math.min(currentZoom * 1.2, 3));
+        if (canvas && typeof canvas.zoom === "function") {
+            const currentZoom = canvas.zoom();
+            canvas.zoom(Math.min(currentZoom * 1.2, 3));
+        }
     }
 
     /**
@@ -454,12 +482,14 @@ export class DMNModeler extends Component {
      * @public
      */
     zoomOut() {
-        if (!this.dmnModeler) {
+        if (!this.dmnModeler || typeof this.dmnModeler.get !== "function") {
             return;
         }
         const canvas = this.dmnModeler.get("canvas");
-        const currentZoom = canvas.zoom();
-        canvas.zoom(Math.max(currentZoom / 1.2, 0.2));
+        if (canvas && typeof canvas.zoom === "function") {
+            const currentZoom = canvas.zoom();
+            canvas.zoom(Math.max(currentZoom / 1.2, 0.2));
+        }
     }
 
     /**
@@ -467,11 +497,13 @@ export class DMNModeler extends Component {
      * @public
      */
     zoomFit() {
-        if (!this.dmnModeler) {
+        if (!this.dmnModeler || typeof this.dmnModeler.get !== "function") {
             return;
         }
         const canvas = this.dmnModeler.get("canvas");
-        canvas.zoom("fit-viewport");
+        if (canvas && typeof canvas.zoom === "function") {
+            canvas.zoom("fit-viewport");
+        }
     }
 
     /**
@@ -479,11 +511,13 @@ export class DMNModeler extends Component {
      * @public
      */
     zoomReset() {
-        if (!this.dmnModeler) {
+        if (!this.dmnModeler || typeof this.dmnModeler.get !== "function") {
             return;
         }
         const canvas = this.dmnModeler.get("canvas");
-        canvas.zoom(1.0);
+        if (canvas && typeof canvas.zoom === "function") {
+            canvas.zoom(1.0);
+        }
     }
 
     /**
@@ -491,11 +525,11 @@ export class DMNModeler extends Component {
      * @public
      */
     undo() {
-        if (!this.dmnModeler || this.props.readonly) {
+        if (!this.dmnModeler || this.props.readonly || typeof this.dmnModeler.get !== "function") {
             return;
         }
         const commandStack = this.dmnModeler.get("commandStack");
-        if (commandStack.canUndo()) {
+        if (commandStack && typeof commandStack.canUndo === "function" && commandStack.canUndo()) {
             commandStack.undo();
         }
     }
@@ -505,11 +539,11 @@ export class DMNModeler extends Component {
      * @public
      */
     redo() {
-        if (!this.dmnModeler || this.props.readonly) {
+        if (!this.dmnModeler || this.props.readonly || typeof this.dmnModeler.get !== "function") {
             return;
         }
         const commandStack = this.dmnModeler.get("commandStack");
-        if (commandStack.canRedo()) {
+        if (commandStack && typeof commandStack.canRedo === "function" && commandStack.canRedo()) {
             commandStack.redo();
         }
     }
@@ -520,11 +554,11 @@ export class DMNModeler extends Component {
      * @returns {Boolean}
      */
     canUndo() {
-        if (!this.dmnModeler || this.props.readonly) {
+        if (!this.dmnModeler || this.props.readonly || typeof this.dmnModeler.get !== "function") {
             return false;
         }
         const commandStack = this.dmnModeler.get("commandStack");
-        return commandStack.canUndo();
+        return commandStack && typeof commandStack.canUndo === "function" && commandStack.canUndo();
     }
 
     /**
@@ -533,11 +567,11 @@ export class DMNModeler extends Component {
      * @returns {Boolean}
      */
     canRedo() {
-        if (!this.dmnModeler || this.props.readonly) {
+        if (!this.dmnModeler || this.props.readonly || typeof this.dmnModeler.get !== "function") {
             return false;
         }
         const commandStack = this.dmnModeler.get("commandStack");
-        return commandStack.canRedo();
+        return commandStack && typeof commandStack.canRedo === "function" && commandStack.canRedo();
     }
 
     /**
@@ -586,7 +620,7 @@ export class DMNModeler extends Component {
      * @private
      */
     _setupMouseWheelZoom() {
-        if (!this.dmnModeler || this.props.readonly) {
+        if (!this.dmnModeler || this.props.readonly || typeof this.dmnModeler.get !== "function") {
             return;
         }
 
@@ -598,7 +632,15 @@ export class DMNModeler extends Component {
 
             ev.preventDefault();
 
+            if (typeof this.dmnModeler.get !== "function") {
+                return;
+            }
+
             const canvas = this.dmnModeler.get("canvas");
+            if (!canvas || typeof canvas.zoom !== "function") {
+                return;
+            }
+
             const currentZoom = canvas.zoom();
             const delta = ev.deltaY > 0 ? 0.9 : 1.1;
             const newZoom = Math.max(0.2, Math.min(3, currentZoom * delta));
@@ -626,7 +668,7 @@ export class DMNModeler extends Component {
      * @private
      */
     _setupMinimap() {
-        if (!this.dmnModeler) {
+        if (!this.dmnModeler || typeof this.dmnModeler.get !== "function") {
             return;
         }
 
@@ -653,8 +695,16 @@ export class DMNModeler extends Component {
             return null;
         }
 
+        // Check if get method is available
+        if (typeof this.dmnModeler.get !== "function") {
+            return null;
+        }
+
         try {
             const elementRegistry = this.dmnModeler.get("elementRegistry");
+            if (!elementRegistry) {
+                return null;
+            }
             const elements = elementRegistry.getAll();
 
             const stats = {
@@ -712,6 +762,10 @@ export class DMNModeler extends Component {
             console.error("DMN modeler not initialized");
             return null;
         }
+        if (typeof this.dmnModeler.saveSVG !== "function") {
+            console.error("DMN modeler saveSVG method not available");
+            return null;
+        }
         try {
             // Export DMN diagram as SVG (DMNDI is included by default)
             const {svg} = await this.dmnModeler.saveSVG();
@@ -732,6 +786,10 @@ export class DMNModeler extends Component {
     async exportPDF() {
         if (!this.dmnModeler) {
             console.error("DMN modeler not initialized");
+            return null;
+        }
+        if (typeof this.dmnModeler.saveSVG !== "function") {
+            console.error("DMN modeler saveSVG method not available");
             return null;
         }
         try {

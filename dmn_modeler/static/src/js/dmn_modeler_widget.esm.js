@@ -102,13 +102,16 @@ export class DmnModelerWidget extends Component {
             showDropZone: false,
             validationStats: null,
         });
+        this._hasUnsavedChanges = false;
 
         onMounted(() => {
             this._setupDragAndDrop();
+            this._setupBlurHandler();
         });
 
         onWillUnmount(() => {
             this._cleanupDragAndDrop();
+            this._cleanupBlurHandler();
         });
     }
 
@@ -138,7 +141,12 @@ export class DmnModelerWidget extends Component {
      */
     _onChange(xmlContent) {
         if (!this.props.readonly) {
+            this._hasUnsavedChanges = true;
             this.props.update(xmlContent);
+            // Mark field as dirty immediately to enable save button
+            if (this.props.setDirty) {
+                this.props.setDirty(true);
+            }
         }
     }
 
@@ -270,6 +278,45 @@ export class DmnModelerWidget extends Component {
     }
 
     /**
+     * Sets up blur handler to mark field as dirty when clicking outside.
+     * This ensures the save button appears when the user clicks outside the canvas.
+     * @private
+     */
+    _setupBlurHandler() {
+        if (!this.containerRef.el || this.props.readonly) {
+            return;
+        }
+
+        // Listen for clicks outside the container
+        this._blurHandler = (event) => {
+            // Check if click is outside the container and there are unsaved changes
+            if (
+                this.containerRef.el &&
+                !this.containerRef.el.contains(event.target) &&
+                this._hasUnsavedChanges &&
+                this.props.setDirty
+            ) {
+                // Mark field as dirty to enable save button
+                this.props.setDirty(true);
+            }
+        };
+
+        // Use capture phase to catch clicks before they bubble
+        document.addEventListener("click", this._blurHandler, true);
+    }
+
+    /**
+     * Cleans up blur event listener.
+     * @private
+     */
+    _cleanupBlurHandler() {
+        if (this._blurHandler) {
+            document.removeEventListener("click", this._blurHandler, true);
+            this._blurHandler = null;
+        }
+    }
+
+    /**
      * Validates if a file is a valid DMN file.
      * @param {File} file The file to validate.
      * @returns {Boolean} True if valid, false otherwise.
@@ -309,9 +356,15 @@ export class DmnModelerWidget extends Component {
             const xmlContent = await this._readFileAsText(file);
             if (xmlContent && this.dmnApi && this.dmnApi.importDiagram) {
                 await this.dmnApi.importDiagram(xmlContent);
-                // Update the field value
-                if (!this.props.readonly) {
+                // Only update if content actually changed
+                const currentValue = this.props.value || "";
+                if (!this.props.readonly && xmlContent !== currentValue) {
                     this.props.update(xmlContent);
+                    // Mark field as dirty only if content changed
+                    if (this.props.setDirty) {
+                        this.props.setDirty(true);
+                    }
+                    this._hasUnsavedChanges = true;
                 }
                 // Update validation stats
                 this._updateValidationStats();
