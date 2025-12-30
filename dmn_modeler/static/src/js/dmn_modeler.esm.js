@@ -246,17 +246,84 @@ export class DMNModeler extends Component {
             return;
         }
         try {
-            await this.dmnModeler.importXML(xmlString);
+            // If XML is empty or invalid, use a basic DMN XML structure
+            let xmlToImport = xmlString || "";
+            if (!xmlToImport.trim()) {
+                xmlToImport = this._createBasicDMNXML();
+            }
+
+            // Import XML and wait for it to complete
+            await this.dmnModeler.importXML(xmlToImport);
+
+            // Wait a bit for the modeler to fully initialize the businessObject
+            await new Promise((resolve) => setTimeout(resolve, 100));
+
             // Check if get method is available before using it
             if (typeof this.dmnModeler.get === "function") {
-                const canvas = this.dmnModeler.get("canvas");
-                if (canvas && typeof canvas.zoom === "function") {
-                    canvas.zoom("fit-viewport");
+                try {
+                    const canvas = this.dmnModeler.get("canvas");
+                    if (canvas && typeof canvas.zoom === "function") {
+                        canvas.zoom("fit-viewport");
+                    }
+                } catch (zoomErr) {
+                    // Zoom is optional, don't fail if it errors
+                    console.debug("Could not zoom to fit viewport:", zoomErr);
                 }
             }
         } catch (err) {
             console.error("could not import DMN diagram", err);
+            // Try to import a basic XML as fallback
+            try {
+                const basicXML = this._createBasicDMNXML();
+                await this.dmnModeler.importXML(basicXML);
+            } catch (fallbackErr) {
+                console.error("Could not import basic DMN diagram as fallback:", fallbackErr);
+            }
         }
+    }
+
+    /**
+     * Creates a basic DMN XML structure.
+     * @returns {String} Basic DMN XML string.
+     * @private
+     */
+    _createBasicDMNXML() {
+        return `<?xml version="1.0" encoding="UTF-8"?>
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20191111/MODEL/"
+                 xmlns:dmndi="http://www.omg.org/spec/DMN/20191111/DMNDI/"
+                 xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+                 id="Definitions_1"
+                 name="DMN Diagram"
+                 namespace="http://camunda.org/schema/1.0/dmn">
+  <dmn:decision id="Decision_1" name="Decision 1">
+    <dmn:decisionTable id="DecisionTable_1">
+      <dmn:input id="Input_1" label="Input">
+        <dmn:inputExpression id="InputExpression_1" typeRef="string">
+          <dmn:text></dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:output id="Output_1" label="Output" typeRef="string"/>
+      <dmn:rule id="Rule_1">
+        <dmn:inputEntry id="UnaryTests_1">
+          <dmn:text></dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="LiteralExpression_1">
+          <dmn:text></dmn:text>
+        </dmn:outputEntry>
+      </dmn:rule>
+    </dmn:decisionTable>
+  </dmn:decision>
+  <dmndi:dmndi>
+    <dmndi:dmndiDiagram id="DMNDiagram_1">
+      <dmndi:dmndiShape id="Decision_1_di" dmnElementRef="Decision_1">
+        <dc:Bounds x="100" y="100" width="180" height="80"/>
+        <dmndi:dmnLabel>
+          <dc:Bounds x="100" y="100" width="180" height="27"/>
+        </dmndi:dmnLabel>
+      </dmndi:dmndiShape>
+    </dmndi:dmndiDiagram>
+  </dmndi:dmndi>
+</dmn:definitions>`;
     }
 
     /**
