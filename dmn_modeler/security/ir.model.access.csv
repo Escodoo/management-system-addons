@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dmn_diagram_user,dmn.diagram.user,model_dmn_diagram,base.group_user,1,1,1,1
+access_dmn_diagram_version_user,dmn.diagram.version.user,model_dmn_diagram_version,base.group_user,1,1,1,0
+access_dmn_template_user,dmn.template.user,model_dmn_template,base.group_user,1,0,1,0
+access_dmn_template_category_user,dmn.template.category.user,model_dmn_template_category,base.group_user,1,0,0,0
+access_dmn_diagram_category_user,dmn.diagram.category.user,model_dmn_diagram_category,base.group_user,1,1,1,1
+access_dmn_template_wizard_user,dmn.template.wizard.user,model_dmn_template_wizard,base.group_user,1,1,1,1
