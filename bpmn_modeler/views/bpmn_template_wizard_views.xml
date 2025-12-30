@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Form View for BPMN Template Wizard -->
+    <record id="bpmn_template_wizard_view_form" model="ir.ui.view">
+        <field name="name">bpmn.template.wizard.view.form</field>
+        <field name="model">bpmn.template.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Select Template">
+                <group>
+                    <field
+                        name="template_id"
+                        options="{'no_create': True}"
+                        widget="many2one"
+                    />
+                    <field name="name" />
+                    <field name="description" placeholder="Optional description..." />
+                </group>
+                <footer>
+                    <button
+                        string="Create Diagram"
+                        name="action_create_diagram"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for BPMN Template Wizard -->
+    <record id="action_bpmn_template_wizard" model="ir.actions.act_window">
+        <field name="name">Create Diagram from Template</field>
+        <field name="res_model">bpmn.template.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
