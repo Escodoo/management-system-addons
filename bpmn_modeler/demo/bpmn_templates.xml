@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <!-- Simple Process Template -->
+    <record id="bpmn_template_simple_process" model="bpmn.template">
+        <field name="name">Simple Process</field>
+        <field
+            name="description"
+        >A basic process with start event, task, and end event</field>
+        <field name="category_id" ref="bpmn_template_category_business" />
+        <field name="icon">fa-play-circle</field>
+        <field name="sequence">10</field>
+        <field
+            name="xml_content"
+        ><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="18.9.1">
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_1"/>
+    <bpmn:task id="Task_1" name="Process Task"/>
+    <bpmn:endEvent id="EndEvent_1"/>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_1"/>
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_1" targetRef="EndEvent_1"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Task_2" bpmnElement="Task_1">
+        <dc:Bounds x="270" y="77" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_2" bpmnElement="EndEvent_1">
+        <dc:Bounds x="432" y="99" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_1" bpmnElement="Flow_1">
+        <di:waypoint x="215" y="117"/>
+        <di:waypoint x="270" y="117"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_2" bpmnElement="Flow_2">
+        <di:waypoint x="370" y="117"/>
+        <di:waypoint x="432" y="117"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>]]></field>
+    </record>
+
+    <!-- Approval Process Template -->
+    <record id="bpmn_template_approval_process" model="bpmn.template">
+        <field name="name">Approval Process</field>
+        <field
+            name="description"
+        >A process with approval gateway and human tasks</field>
+        <field name="category_id" ref="bpmn_template_category_workflow" />
+        <field name="icon">fa-check-circle</field>
+        <field name="sequence">20</field>
+        <field
+            name="xml_content"
+        ><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="18.9.1">
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_1"/>
+    <bpmn:userTask id="UserTask_1" name="Submit Request"/>
+    <bpmn:exclusiveGateway id="Gateway_1" name="Approval Required?"/>
+    <bpmn:userTask id="UserTask_2" name="Review Request"/>
+    <bpmn:exclusiveGateway id="Gateway_2" name="Approved?"/>
+    <bpmn:task id="Task_1" name="Process Request"/>
+    <bpmn:task id="Task_2" name="Reject Request"/>
+    <bpmn:endEvent id="EndEvent_1" name="Request Processed"/>
+    <bpmn:endEvent id="EndEvent_2" name="Request Rejected"/>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="UserTask_1"/>
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="UserTask_1" targetRef="Gateway_1"/>
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Gateway_1" targetRef="UserTask_2" name="Yes"/>
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Gateway_1" targetRef="Task_1" name="No"/>
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="UserTask_2" targetRef="Gateway_2"/>
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Gateway_2" targetRef="Task_1" name="Yes"/>
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Gateway_2" targetRef="Task_2" name="No"/>
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="Task_1" targetRef="EndEvent_1"/>
+    <bpmn:sequenceFlow id="Flow_9" sourceRef="Task_2" targetRef="EndEvent_2"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_UserTask_1" bpmnElement="UserTask_1">
+        <dc:Bounds x="270" y="77" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Gateway_1" bpmnElement="Gateway_1" isMarkerVisible="true">
+        <dc:Bounds x="425" y="92" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_UserTask_2" bpmnElement="UserTask_2">
+        <dc:Bounds x="530" y="77" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Gateway_2" bpmnElement="Gateway_2" isMarkerVisible="true">
+        <dc:Bounds x="685" y="92" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Task_1" bpmnElement="Task_1">
+        <dc:Bounds x="790" y="77" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Task_2" bpmnElement="Task_2">
+        <dc:Bounds x="790" y="200" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_1" bpmnElement="EndEvent_1">
+        <dc:Bounds x="952" y="99" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_2" bpmnElement="EndEvent_2">
+        <dc:Bounds x="952" y="222" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_1" bpmnElement="Flow_1">
+        <di:waypoint x="215" y="117"/>
+        <di:waypoint x="270" y="117"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_2" bpmnElement="Flow_2">
+        <di:waypoint x="370" y="117"/>
+        <di:waypoint x="425" y="117"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_3" bpmnElement="Flow_3">
+        <di:waypoint x="450" y="117"/>
+        <di:waypoint x="530" y="117"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_4" bpmnElement="Flow_4">
+        <di:waypoint x="450" y="142"/>
+        <di:waypoint x="790" y="142"/>
+        <di:waypoint x="790" y="117"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_5" bpmnElement="Flow_5">
+        <di:waypoint x="630" y="117"/>
+        <di:waypoint x="685" y="117"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_6" bpmnElement="Flow_6">
+        <di:waypoint x="735" y="117"/>
+        <di:waypoint x="790" y="117"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_7" bpmnElement="Flow_7">
+        <di:waypoint x="735" y="142"/>
+        <di:waypoint x="790" y="142"/>
+        <di:waypoint x="790" y="240"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_8" bpmnElement="Flow_8">
+        <di:waypoint x="890" y="117"/>
+        <di:waypoint x="952" y="117"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_9" bpmnElement="Flow_9">
+        <di:waypoint x="890" y="240"/>
+        <di:waypoint x="952" y="240"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>]]></field>
+    </record>
+
+    <!-- Parallel Process Template -->
+    <record id="bpmn_template_parallel_process" model="bpmn.template">
+        <field name="name">Parallel Process</field>
+        <field
+            name="description"
+        >A process with parallel gateway for concurrent tasks</field>
+        <field name="category_id" ref="bpmn_template_category_business" />
+        <field name="icon">fa-code-fork</field>
+        <field name="sequence">30</field>
+        <field
+            name="xml_content"
+        ><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="18.9.1">
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_1"/>
+    <bpmn:parallelGateway id="Gateway_1" name="Split"/>
+    <bpmn:task id="Task_1" name="Task 1"/>
+    <bpmn:task id="Task_2" name="Task 2"/>
+    <bpmn:task id="Task_3" name="Task 3"/>
+    <bpmn:parallelGateway id="Gateway_2" name="Join"/>
+    <bpmn:task id="Task_4" name="Final Task"/>
+    <bpmn:endEvent id="EndEvent_1"/>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Gateway_1"/>
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Gateway_1" targetRef="Task_1"/>
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Gateway_1" targetRef="Task_2"/>
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Gateway_1" targetRef="Task_3"/>
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_1" targetRef="Gateway_2"/>
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_2" targetRef="Gateway_2"/>
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_3" targetRef="Gateway_2"/>
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="Gateway_2" targetRef="Task_4"/>
+    <bpmn:sequenceFlow id="Flow_9" sourceRef="Task_4" targetRef="EndEvent_1"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Gateway_1" bpmnElement="Gateway_1" isMarkerVisible="true">
+        <dc:Bounds x="270" y="74" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Task_1" bpmnElement="Task_1">
+        <dc:Bounds x="375" y="27" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Task_2" bpmnElement="Task_2">
+        <dc:Bounds x="375" y="77" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Task_3" bpmnElement="Task_3">
+        <dc:Bounds x="375" y="127" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Gateway_2" bpmnElement="Gateway_2" isMarkerVisible="true">
+        <dc:Bounds x="530" y="74" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_Task_4" bpmnElement="Task_4">
+        <dc:Bounds x="635" y="77" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_2" bpmnElement="EndEvent_1">
+        <dc:Bounds x="792" y="99" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_1" bpmnElement="Flow_1">
+        <di:waypoint x="215" y="117"/>
+        <di:waypoint x="270" y="99"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_2" bpmnElement="Flow_2">
+        <di:waypoint x="320" y="99"/>
+        <di:waypoint x="375" y="67"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_3" bpmnElement="Flow_3">
+        <di:waypoint x="320" y="99"/>
+        <di:waypoint x="375" y="117"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_4" bpmnElement="Flow_4">
+        <di:waypoint x="320" y="124"/>
+        <di:waypoint x="375" y="167"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_5" bpmnElement="Flow_5">
+        <di:waypoint x="475" y="67"/>
+        <di:waypoint x="530" y="99"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_6" bpmnElement="Flow_6">
+        <di:waypoint x="475" y="117"/>
+        <di:waypoint x="530" y="99"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_7" bpmnElement="Flow_7">
+        <di:waypoint x="475" y="167"/>
+        <di:waypoint x="530" y="124"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_8" bpmnElement="Flow_8">
+        <di:waypoint x="580" y="99"/>
+        <di:waypoint x="635" y="117"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_BPMNEdge_Flow_9" bpmnElement="Flow_9">
+        <di:waypoint x="735" y="117"/>
+        <di:waypoint x="792" y="117"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>]]></field>
+    </record>
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bpmn_diagram_user,bpmn.diagram.user,model_bpmn_diagram,base.group_user,1,1,1,1
+access_bpmn_diagram_version_user,bpmn.diagram.version.user,model_bpmn_diagram_version,base.group_user,1,1,1,0
+access_bpmn_template_user,bpmn.template.user,model_bpmn_template,base.group_user,1,0,1,0
+access_bpmn_template_category_user,bpmn.template.category.user,model_bpmn_template_category,base.group_user,1,0,0,0
+access_bpmn_diagram_category_user,bpmn.diagram.category.user,model_bpmn_diagram_category,base.group_user,1,1,1,1
+access_bpmn_template_wizard_user,bpmn.template.wizard.user,model_bpmn_template_wizard,base.group_user,1,1,1,1

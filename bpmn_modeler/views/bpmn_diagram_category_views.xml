@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- List View for BPMN Diagram Category -->
+    <record id="bpmn_diagram_category_view_tree" model="ir.ui.view">
+        <field name="name">bpmn.diagram.category.view.list</field>
+        <field name="model">bpmn.diagram.category</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="diagram_count" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View for BPMN Diagram Category -->
+    <record id="bpmn_diagram_category_view_form" model="ir.ui.view">
+        <field name="name">bpmn.diagram.category.view.form</field>
+        <field name="model">bpmn.diagram.category</field>
+        <field name="arch" type="xml">
+            <form string="Diagram Category">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="sequence" />
+                        </group>
+                        <group>
+                            <field name="diagram_count" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field
+                                name="description"
+                                placeholder="Describe this category..."
+                            />
+                        </page>
+                        <page string="Diagrams">
+                            <field name="diagram_ids" readonly="1">
+                                <list>
+                                    <field name="name" />
+                                    <field name="version" />
+                                    <field name="state" widget="badge" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
