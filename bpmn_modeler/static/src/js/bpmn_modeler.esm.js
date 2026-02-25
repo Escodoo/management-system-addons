@@ -640,6 +640,7 @@ export class BPMNModeler extends Component {
         } catch (err) {
             // Minimap module not available, that's okay
             console.debug("Minimap not available");
+            console.debug(err.message);
         }
     }
 

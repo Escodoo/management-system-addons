@@ -1,8 +1,8 @@
 /** @odoo-module **/
-// eslint-disable-next-line sort-imports
+
 import {Component, onMounted, onWillUnmount, useRef, useState, xml} from "@odoo/owl";
 import {registry} from "@web/core/registry";
-// eslint-disable-next-line sort-imports
+
 import {useService} from "@web/core/utils/hooks";
 // eslint-disable-next-line sort-imports
 import {standardFieldProps} from "@web/views/fields/standard_field_props";

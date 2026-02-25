@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo noupdate="1">
-        <!-- Business Process Templates -->
-        <record id="bpmn_template_category_business" model="bpmn.template.category">
-            <field name="name">Business Processes</field>
-            <field name="description">Templates for common business processes</field>
-            <field name="sequence">10</field>
-        </record>
+    <!-- Business Process Templates -->
+    <record id="bpmn_template_category_business" model="bpmn.template.category">
+        <field name="name">Business Processes</field>
+        <field name="description">Templates for common business processes</field>
+        <field name="sequence">10</field>
+    </record>
 
-        <!-- Workflow Templates -->
-        <record id="bpmn_template_category_workflow" model="bpmn.template.category">
-            <field name="name">Workflows</field>
-            <field
-            name="description"
-        >Templates for approval and workflow processes</field>
-            <field name="sequence">20</field>
-        </record>
+    <!-- Workflow Templates -->
+    <record id="bpmn_template_category_workflow" model="bpmn.template.category">
+        <field name="name">Workflows</field>
+        <field name="description">Templates for approval and workflow processes</field>
+        <field name="sequence">20</field>
+    </record>
 
-        <!-- IT Processes -->
-        <record id="bpmn_template_category_it" model="bpmn.template.category">
-            <field name="name">IT Processes</field>
-            <field name="description">Templates for IT and technical processes</field>
-            <field name="sequence">30</field>
-        </record>
+    <!-- IT Processes -->
+    <record id="bpmn_template_category_it" model="bpmn.template.category">
+        <field name="name">IT Processes</field>
+        <field name="description">Templates for IT and technical processes</field>
+        <field name="sequence">30</field>
+    </record>
 
-        <!-- HR Processes -->
-        <record id="bpmn_template_category_hr" model="bpmn.template.category">
-            <field name="name">HR Processes</field>
-            <field name="description">Templates for human resources processes</field>
-            <field name="sequence">40</field>
-        </record>
+    <!-- HR Processes -->
+    <record id="bpmn_template_category_hr" model="bpmn.template.category">
+        <field name="name">HR Processes</field>
+        <field name="description">Templates for human resources processes</field>
+        <field name="sequence">40</field>
+    </record>
 </odoo>

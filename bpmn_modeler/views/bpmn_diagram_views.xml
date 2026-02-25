@@ -291,5 +291,4 @@
         action="bpmn_template_category_action"
         sequence="21"
     />
-
 </odoo>

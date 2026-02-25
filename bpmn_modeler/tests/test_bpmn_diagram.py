@@ -273,7 +273,7 @@ class TestBpmnDiagram(TransactionCase):
         self.assertEqual(version_history.user_id, self.env.user)
 
     def test_version_history_not_created_on_first_write(self):
-        """Test that version history is not created on first write if no previous XML."""
+        """Test that version history is not created on first write if no previous XML"""
         diagram = self.BpmnDiagram.create(
             {
                 "name": "Test Diagram",
