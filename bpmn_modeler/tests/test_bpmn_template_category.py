@@ -6,13 +6,14 @@ from odoo.tests.common import TransactionCase
 class TestBpmnTemplateCategory(TransactionCase):
     """Test cases for BPMN Template Category model."""
 
-    def setUp(self):
-        super().setUp()
-        self.BpmnTemplateCategory = self.env["bpmn.template.category"]
-        self.BpmnTemplate = self.env["bpmn.template"]
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.BpmnTemplateCategory = cls.env["bpmn.template.category"]
+        cls.BpmnTemplate = cls.env["bpmn.template"]
 
         # Sample BPMN XML
-        self.sample_xml = """<?xml version="1.0" encoding="UTF-8"?>
+        cls.sample_xml = """<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
                   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"

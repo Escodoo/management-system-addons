@@ -6,14 +6,15 @@ from odoo.tests.common import TransactionCase
 class TestBpmnTemplateWizard(TransactionCase):
     """Test cases for BPMN Template Wizard model."""
 
-    def setUp(self):
-        super().setUp()
-        self.BpmnTemplateWizard = self.env["bpmn.template.wizard"]
-        self.BpmnTemplate = self.env["bpmn.template"]
-        self.BpmnDiagram = self.env["bpmn.diagram"]
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.BpmnTemplateWizard = cls.env["bpmn.template.wizard"]
+        cls.BpmnTemplate = cls.env["bpmn.template"]
+        cls.BpmnDiagram = cls.env["bpmn.diagram"]
 
         # Sample BPMN XML
-        self.sample_xml = """<?xml version="1.0" encoding="UTF-8"?>
+        cls.sample_xml = """<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
                   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
@@ -29,11 +30,11 @@ class TestBpmnTemplateWizard(TransactionCase):
 </bpmn:definitions>"""
 
         # Create test template
-        self.test_template = self.BpmnTemplate.create(
+        cls.test_template = cls.BpmnTemplate.create(
             {
                 "name": "Test Template",
                 "description": "Test template description",
-                "xml_content": self.sample_xml,
+                "xml_content": cls.sample_xml,
                 "active": True,
             }
         )

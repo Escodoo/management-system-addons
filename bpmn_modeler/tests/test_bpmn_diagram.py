@@ -7,16 +7,17 @@ from odoo.tests.common import TransactionCase
 class TestBpmnDiagram(TransactionCase):
     """Test cases for BPMN Diagram model."""
 
-    def setUp(self):
-        super().setUp()
-        self.BpmnDiagram = self.env["bpmn.diagram"]
-        self.BpmnDiagramCategory = self.env["bpmn.diagram.category"]
-        self.BpmnTemplate = self.env["bpmn.template"]
-        self.BpmnDiagramVersion = self.env["bpmn.diagram.version"]
-        self.test_user = self.env.ref("base.user_admin")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.BpmnDiagram = cls.env["bpmn.diagram"]
+        cls.BpmnDiagramCategory = cls.env["bpmn.diagram.category"]
+        cls.BpmnTemplate = cls.env["bpmn.template"]
+        cls.BpmnDiagramVersion = cls.env["bpmn.diagram.version"]
+        cls.test_user = cls.env.ref("base.user_admin")
 
         # Create test category
-        self.test_category = self.BpmnDiagramCategory.create(
+        cls.test_category = cls.BpmnDiagramCategory.create(
             {
                 "name": "Test Category",
                 "description": "Test category description",
@@ -24,7 +25,7 @@ class TestBpmnDiagram(TransactionCase):
         )
 
         # Create test template
-        self.test_template = self.BpmnTemplate.create(
+        cls.test_template = cls.BpmnTemplate.create(
             {
                 "name": "Test Template",
                 "description": "Test template description",

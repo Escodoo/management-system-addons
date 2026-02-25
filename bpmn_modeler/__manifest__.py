@@ -1,7 +1,7 @@
 {
     "name": "BPMN Modeler",
     "summary": "Module to model BPMN flows using bpmn.js and Odoo's OWL framework.",
-    "version": "16.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Industries",
     "website": "https://github.com/Escodoo/management-system-addons",
     "author": "Escodoo",

@@ -1,12 +1,9 @@
 /** @odoo-module **/
-
 import {Component, onMounted, onWillUnmount, useRef, useState, xml} from "@odoo/owl";
+import {_t} from "@web/core/l10n/translation";
 import {registry} from "@web/core/registry";
-
 import {useService} from "@web/core/utils/hooks";
-// eslint-disable-next-line sort-imports
 import {standardFieldProps} from "@web/views/fields/standard_field_props";
-// eslint-disable-next-line sort-imports
 import {BPMNModeler} from "./bpmn_modeler.esm";
 
 export class BpmnModelerWidget extends Component {
@@ -74,7 +71,7 @@ export class BpmnModelerWidget extends Component {
                 </small>
             </div>
             <BPMNModeler
-                bpmn_xml="props.value || ''"
+                bpmn_xml="value"
                 readonly="props.readonly"
                 onChange="(xmlContent) => this._onChange(xmlContent)"
                 onSVGChange="(svg) => this._onSVGChange(svg)"
@@ -91,6 +88,10 @@ export class BpmnModelerWidget extends Component {
     static props = {
         ...standardFieldProps,
     };
+
+    get value() {
+        return this.props.record.data[this.props.name] || "";
+    }
 
     setup() {
         this.bpmnApi = null;
@@ -137,7 +138,7 @@ export class BpmnModelerWidget extends Component {
      */
     _onChange(xmlContent) {
         if (!this.props.readonly) {
-            this.props.update(xmlContent);
+            this.props.record.update({[this.props.name]: xmlContent});
         }
     }
 
@@ -216,9 +217,7 @@ export class BpmnModelerWidget extends Component {
 
             if (!this.isDraft) {
                 this.notification.add(
-                    this.env._t(
-                        "Import is only allowed when the diagram is in draft state."
-                    ),
+                    _t("Import is only allowed when the diagram is in draft state."),
                     {type: "warning"}
                 );
                 return;
@@ -231,7 +230,7 @@ export class BpmnModelerWidget extends Component {
                     await this._handleFileImport(file);
                 } else {
                     this.notification.add(
-                        this.env._t("Invalid file. Please drop a .bpmn or .xml file."),
+                        _t("Invalid file. Please drop a .bpmn or .xml file."),
                         {type: "danger"}
                     );
                 }
@@ -297,9 +296,7 @@ export class BpmnModelerWidget extends Component {
     async _handleFileImport(file) {
         if (!this.isDraft) {
             this.notification.add(
-                this.env._t(
-                    "Import is only allowed when the diagram is in draft state."
-                ),
+                _t("Import is only allowed when the diagram is in draft state."),
                 {type: "warning"}
             );
             return;
@@ -310,7 +307,7 @@ export class BpmnModelerWidget extends Component {
                 await this.bpmnApi.importDiagram(xmlContent);
                 // Update the field value
                 if (!this.props.readonly) {
-                    this.props.update(xmlContent);
+                    this.props.record.update({[this.props.name]: xmlContent});
                 }
                 // Update validation stats
                 this._updateValidationStats();
@@ -318,7 +315,7 @@ export class BpmnModelerWidget extends Component {
         } catch (err) {
             console.error("Error importing BPMN file:", err);
             this.notification.add(
-                this.env._t(
+                _t(
                     "Error importing BPMN file. Please make sure it is a valid BPMN XML file."
                 ),
                 {type: "danger"}
@@ -333,9 +330,7 @@ export class BpmnModelerWidget extends Component {
     onImportClick() {
         if (!this.isDraft) {
             this.notification.add(
-                this.env._t(
-                    "Import is only allowed when the diagram is in draft state."
-                ),
+                _t("Import is only allowed when the diagram is in draft state."),
                 {type: "warning"}
             );
             return;
@@ -357,9 +352,12 @@ export class BpmnModelerWidget extends Component {
         }
 
         if (!this._validateFile(file)) {
-            this.notification.add("Invalid file. Please select a .bpmn or .xml file.", {
-                type: "danger",
-            });
+            this.notification.add(
+                _t("Invalid file. Please select a .bpmn or .xml file."),
+                {
+                    type: "danger",
+                }
+            );
             if (this.fileInputRef.el) {
                 this.fileInputRef.el.value = "";
             }
@@ -579,4 +577,9 @@ export class BpmnModelerWidget extends Component {
     }
 }
 
-registry.category("fields").add("bpmn_modeler", BpmnModelerWidget);
+export const bpmnModelerField = {
+    component: BpmnModelerWidget,
+    supportedTypes: ["text"],
+};
+
+registry.category("fields").add("bpmn_modeler", bpmnModelerField);

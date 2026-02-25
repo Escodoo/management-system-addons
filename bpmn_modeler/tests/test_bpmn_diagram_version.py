@@ -6,10 +6,11 @@ from odoo.tests.common import TransactionCase
 class TestBpmnDiagramVersion(TransactionCase):
     """Test cases for BPMN Diagram Version model."""
 
-    def setUp(self):
-        super().setUp()
-        self.BpmnDiagramVersion = self.env["bpmn.diagram.version"]
-        self.BpmnDiagram = self.env["bpmn.diagram"]
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.BpmnDiagramVersion = cls.env["bpmn.diagram.version"]
+        cls.BpmnDiagram = cls.env["bpmn.diagram"]
 
     def test_create_version(self):
         """Test creating a version history entry."""

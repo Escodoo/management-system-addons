@@ -6,10 +6,11 @@ from odoo.tests.common import TransactionCase
 class TestBpmnDiagramCategory(TransactionCase):
     """Test cases for BPMN Diagram Category model."""
 
-    def setUp(self):
-        super().setUp()
-        self.BpmnDiagramCategory = self.env["bpmn.diagram.category"]
-        self.BpmnDiagram = self.env["bpmn.diagram"]
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.BpmnDiagramCategory = cls.env["bpmn.diagram.category"]
+        cls.BpmnDiagram = cls.env["bpmn.diagram"]
 
     def test_create_category(self):
         """Test creating a diagram category."""

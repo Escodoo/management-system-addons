@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <!-- Tree View for BPMN Diagram Category -->
+    <!-- List View for BPMN Diagram Category -->
     <record id="bpmn_diagram_category_view_tree" model="ir.ui.view">
-        <field name="name">bpmn.diagram.category.view.tree</field>
+        <field name="name">bpmn.diagram.category.view.list</field>
         <field name="model">bpmn.diagram.category</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="sequence" widget="handle" />
                 <field name="name" />
                 <field name="diagram_count" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -38,11 +38,11 @@
                         </page>
                         <page string="Diagrams">
                             <field name="diagram_ids" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="name" />
                                     <field name="version" />
                                     <field name="state" widget="badge" />
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>

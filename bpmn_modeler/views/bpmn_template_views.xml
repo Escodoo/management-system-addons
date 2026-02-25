@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <!-- Tree View for BPMN Template Category -->
+    <!-- List View for BPMN Template Category -->
     <record id="bpmn_template_category_view_tree" model="ir.ui.view">
-        <field name="name">bpmn.template.category.view.tree</field>
+        <field name="name">bpmn.template.category.view.list</field>
         <field name="model">bpmn.template.category</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="sequence" widget="handle" />
                 <field name="name" />
                 <field name="template_count" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -38,11 +38,11 @@
                         </page>
                         <page string="Templates">
                             <field name="template_ids" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="name" />
                                     <field name="is_public" />
                                     <field name="usage_count" />
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -51,19 +51,19 @@
         </field>
     </record>
 
-    <!-- Tree View for BPMN Template -->
+    <!-- List View for BPMN Template -->
     <record id="bpmn_template_view_tree" model="ir.ui.view">
-        <field name="name">bpmn.template.view.tree</field>
+        <field name="name">bpmn.template.view.list</field>
         <field name="model">bpmn.template</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="sequence" widget="handle" />
                 <field name="name" />
                 <field name="category_id" />
                 <field name="is_public" />
                 <field name="usage_count" />
                 <field name="active" invisible="1" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -128,7 +128,7 @@
                 <field name="icon" />
                 <field name="usage_count" />
                 <templates>
-                    <t t-name="kanban-box">
+                    <t t-name="card">
                         <div class="oe_kanban_card oe_kanban_global_click">
                             <div class="oe_kanban_content">
                                 <div class="o_kanban_record_top">
